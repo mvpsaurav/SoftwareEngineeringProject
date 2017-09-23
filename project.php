@@ -25,16 +25,21 @@
     $results->data_seek(0);
     foreach($results->fetch_assoc() as $key => $value) {
       $key = str_replace("_", " ", $key);
-      echo '<th>' . $key . '</th>';
+      echo '<th>' . $key . '</th>' . "\n";
     }
-    echo '</tr></thead><tbody>';
+    echo '</tr></thead><tbody id="results">';
 
     # Iterate through and print the contents of each field.
     $results->data_seek(0);
     while($row = $results->fetch_assoc()) {
       echo '<tr>';
       foreach($row as $value) {
-        echo '<td>' . $value . '</td>';
+        if ($value === '0') {
+          $value = 'No';
+      } else if ($value === '1') {
+          $value = 'Yes';
+        }
+        echo '<td>' . $value . '</td>' . "\n";
       }
       echo '</tr>';
     }
@@ -59,6 +64,13 @@
     <link href="bootstrap.css" rel="stylesheet">
     <!-- Bootstrap theme -->
     <link href="bootstrap-theme.css" rel="stylesheet">
+    <style>
+        body {
+            margin-top: 15px;
+        }
+    </style>
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
   </head>
 
@@ -68,11 +80,9 @@
         <div class="col-md-3">
           <div class="well">
             <h1>Queries:</h1>
-            <div class="form-group">
-              <p>Other school's name: <input type="text" name="otherSchoolName" class="form-control" placeholder="School name"></p>
-              <p>Other school's course code: <input type="text" name="otherCourseCode" class="form-control" placeholder="Course code"></p>
-              <p>SCU course code: <input type="text" name="localCourseName" class="form-control" placeholder="Course code"></p>
-            </div>
+            <p>Other school's name: <input type="text" id="otherSchoolName" placeholder="School name"></p>
+            <p>Other school's course code: <input type="text" id="otherCourseCode" placeholder="Course code"></p>
+            <p>SCU's course code: <input type="text" id="localCourseCode" placeholder="Course code"></p>
           </div>
         </div>
       <div class="col-md-9">
@@ -98,5 +108,41 @@
       </div>
     </div>
   </div>
+
+  <script>
+  // Get all the rows from the table.
+  var $tableEntries = $('#results tr');
+
+  /**
+   * Updates the table of results to only contain results that match what is entered in the search boxes.
+   */
+  updateRows = function() {
+    // Get the search terms.
+    var otherSchoolNamesSearch = $.trim($('#otherSchoolName').val()).replace(/ +/g, ' ').toLowerCase();
+    var otherCourseCodesSearch = $.trim($('#otherCourseCode').val()).replace(/ +/g, ' ').toLowerCase();
+    var localCourseCodesSearch = $.trim($('#localCourseCode').val()).replace(/ +/g, ' ').toLowerCase();
+
+    // Filter the table entries so that only ones that match the search terms are visible.
+    $tableEntries.show().filter(function() {
+      // For each particular row, split the row up into an array, where each entry is a column in the table.
+      var columns = $.trim($(this).text().split("\n")).split(",");
+      var otherCourseCode = $.trim(columns[0]).toLowerCase();
+      var otherSchoolName = $.trim(columns[1]).toLowerCase();
+      var localCourseCode = $.trim(columns[2]).toLowerCase();
+
+      // Check to see if any of the search terms do not match.  If so, return true, so we hide all of the
+      // entries that are not a match.
+      var otherSchoolNameMatches = !~otherSchoolName.indexOf(otherSchoolNamesSearch);
+      var otherCourseCodeMatches = !~otherCourseCode.indexOf(otherCourseCodesSearch);
+      var localCourseCodeMatches = !~localCourseCode.indexOf(localCourseCodesSearch);
+      return otherSchoolNameMatches || otherCourseCodeMatches || localCourseCodeMatches;
+    }).hide();
+  }
+
+  // Any time one of the search terms is changed, update the search results.
+  $('#otherSchoolName').keyup(updateRows);
+  $('#otherCourseCode').keyup(updateRows);
+  $('#localCourseCode').keyup(updateRows);
+  </script>
   </body>
 </html>

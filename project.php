@@ -1,52 +1,5 @@
 <?php
-  # Function for displaying the results of a MySQL query result object nicely,
-  # using Bootstrap's table styling.
-  function DisplayResults($results) {
-    # Check if the query failed.
-    if(!$results) {
-      echo '<h1>Something went wrong with the query.</h1>';
-      return;
-    }
 
-    # Output the amount of results.
-    if($results->fetch_assoc() == NULL or $results->num_rows == 0) {
-      echo '<h1 id="numResults">No results.</h1>';
-      return;
-    }
-    elseif ($results->num_rows == 1) {
-      echo '<h1 id="numResults">1 result:</h1>';
-    }
-    else {
-      echo '<h1 id="numResults">' . $results->num_rows . ' results:</h1>';
-    }
-    echo '<table class="table table-striped table-responsive"><thead><tr>';
-
-    # Iterate through and print the names of each field, as the table headers.
-    $results->data_seek(0);
-    foreach($results->fetch_assoc() as $key => $value) {
-      $key = str_replace("_", " ", $key);
-      echo '<th>' . $key . '</th>' . "\n";
-    }
-    echo '</tr></thead><tbody id="results">';
-
-    # Iterate through and print the contents of each field.
-    $results->data_seek(0);
-    while($row = $results->fetch_assoc()) {
-      echo '<tr>';
-      foreach($row as $value) {
-        if ($value === '0') {
-          $value = 'No';
-      } else if ($value === '1') {
-          $value = 'Yes';
-        }
-        echo '<td>' . $value . '</td>' . "\n";
-      }
-      echo '</tr>';
-    }
-
-    # Terminate the table.
-    echo '</tbody></table>';
-  }
 ?>
 
 <html lang="en">
@@ -90,33 +43,20 @@
             <div class="well">
               <p><button class="btn btn-default" onclick="$('#newEntryFields').toggle();" type="button">Create new entry</button></p>
               <div id="newEntryFields" style="display: none">
-                <input type="text" placeholder="Branch ID" class="form-control">
                 <p>Other school's course code: <input type="text" id="otherCourseCode" class="form-control" placeholder="Course code"></p>
                 <p>Other school's name: <input type="text" id="otherSchoolName" class="form-control" placeholder="School name"></p>
                 <p>SCU's course code: <input type="text" id="localCourseCode" class="form-control" placeholder="Course code"></p>
+                <p>Approved?</p>
                 <div class="dropdown">
                   <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" id="isApproved" data-toggle="dropdown">
                     Approved?
                     <span class="caret"></span>
                   </button>
-                  <div class="dropdown-menu">
-                    <option class="dropdown-item" value="0">No</option>
-                    <option class="dropdown-item" value="1">Yes</option>
-                  </div>
+                  <ul class="dropdown-menu">
+                    <li><a onclick="$('#isApproved').html('Yes<span class=\'caret\'></span>');$('#isApproved').val(1);">Yes</a></li>
+                    <li><a onclick="$('#isApproved').html('No<span class=\'caret\'></span>');$('#isApproved').val(0);">No</a></li>
+                  </ul>
                 </div>
-                <div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    Dropdown
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <li><a href="#">Action</a></li>
-    <li><a href="#">Another action</a></li>
-    <li><a href="#">Something else here</a></li>
-    <li role="separator" class="divider"></li>
-    <li><a href="#">Separated link</a></li>
-  </ul>
-</div>
                 <p>Approver's name: <input type="text" id="approverName" class="form-control" placeholder="Approver's name"></p>
                 <button name="b" value="1" class="btn btn-primary">Submit</button>
               </div>
@@ -126,6 +66,55 @@
       <div class="col-md-9">
         <div class="well">
 <?php
+  # Function for displaying the results of a MySQL query result object nicely,
+  # using Bootstrap's table styling.
+  function DisplayResults($results) {
+    # Check if the query failed.
+    if(!$results) {
+      echo '<h1>Something went wrong with the query.</h1>';
+      return;
+    }
+
+    # Output the amount of results.
+    if($results->fetch_assoc() == NULL or $results->num_rows == 0) {
+      echo '<h1 id="numResults">No results.</h1>';
+      return;
+    }
+    elseif ($results->num_rows == 1) {
+      echo '<h1 id="numResults">1 result:</h1>';
+    }
+    else {
+      echo '<h1 id="numResults">' . $results->num_rows . ' results:</h1>';
+    }
+    echo '<table class="table table-striped table-responsive"><thead><tr>';
+
+    # Iterate through and print the names of each field, as the table headers.
+    $results->data_seek(0);
+    foreach($results->fetch_assoc() as $key => $value) {
+      $key = str_replace("_", " ", $key);
+      echo '<th>' . $key . '</th>' . "\n";
+    }
+    echo '</tr></thead><tbody id="results">';
+
+    # Iterate through and print the contents of each field.
+    $results->data_seek(0);
+    while($row = $results->fetch_assoc()) {
+      echo '<tr>';
+      foreach($row as $value) {
+        if ($value === '0') {
+          $value = 'No';
+        } else if ($value === '1') {
+          $value = 'Yes';
+        }
+        echo '<td>' . $value . '</td>' . "\n";
+      }
+      echo '</tr>';
+    }
+
+    # Terminate the table.
+    echo '</tbody></table>';
+  }
+
   $db_host = "dbserver.engr.scu.edu";
   $db_user = "cwalther";
   $db_pass = "plaintextAF";
@@ -141,7 +130,7 @@
   } else {
     echo 'Could not retrieve results.';
   }
- ?>
+?>
         </div>
       </div>
     </div>

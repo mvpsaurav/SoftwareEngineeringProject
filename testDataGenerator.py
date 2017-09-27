@@ -2,6 +2,12 @@ import random
 
 
 def generateDeleteAndCreateTableQueries(outputFile, tableName):
+    ''' A utility function for generate SQL queries that create a table with the
+    specified name, dropping the table if it already exists.
+
+    @param outputFile: The file to write the queries to.
+    @param tableName: The name of the table to create.
+    '''
     sqlStatement = "DROP TABLE IF EXISTS {};".format(tableName)
     outputFile.write(sqlStatement)
     outputFile.write("\n")

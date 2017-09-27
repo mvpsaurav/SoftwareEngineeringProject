@@ -69,37 +69,37 @@
       <div class="row">
         <div class="col-md-3">
           <form action="SoftwareEngineeringProject.php" method="POST">
-          <div class="form-group">
-            <div class="well">
-              <h1>Queries:</h1>
-              <p>Other school's name: <input type="text" id="otherSchoolName" class="form-control" placeholder="School name"></p>
-              <p>Other school's course code: <input type="text" id="otherCourseCode" class="form-control" placeholder="Course code"></p>
-              <p>SCU's course code: <input type="text" id="localCourseCode" class="form-control" placeholder="Course code"></p>
-            </div>
-            <div class="well">
-              <p><button class="btn btn-default" onclick="$('#newEntryFields').toggle();" type="button">Create new entry</button></p>
-              <div id="newEntryFields" style="display: none">
-                <p>Other school's course code: <input type="text" name="otherCourseCode" class="form-control" placeholder="Course code"></p>
-                <p>Other school's name: <input type="text" name="otherSchoolName" class="form-control" placeholder="School name"></p>
-                <p>SCU's course code: <input type="text" name="localCourseCode" class="form-control" placeholder="Course code"></p>
-                <p>Approved?</p>
-                <input id="isApproved" name="isApproved" type="hidden">
-                <div class="dropdown">
-                  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" id="isApprovedDropdown" data-toggle="dropdown">
-                    Approved?
-                    <span class="caret"></span>
-                  </button>
-                  <ul class="dropdown-menu">
-                    <li><a onclick="$('#isApprovedDropdown').html('Yes<span class=\'caret\'></span>');$('#isApproved').val(1);">Yes</a></li>
-                    <li><a onclick="$('#isApprovedDropdown').html('No<span class=\'caret\'></span>');$('#isApproved').val(0);">No</a></li>
-                  </ul>
+            <div class="form-group">
+              <div class="well">
+                <h1>Filter by:</h1>
+                <p>Other school's name: <input type="text" id="otherSchoolNameSearch" class="form-control" placeholder="School name"></p>
+                <p>Other school's course code: <input type="text" id="otherCourseCodeSearch" class="form-control" placeholder="Course code"></p>
+                <p>SCU's course code: <input type="text" id="localCourseCodeSearch" class="form-control" placeholder="Course code"></p>
+              </div>
+              <div class="well">
+                <p><button class="btn btn-default" onclick="$('#newEntryFields').toggle();" type="button">Create new entry</button></p>
+                <div id="newEntryFields" style="display: none">
+                  <p>Other school's course code: <input type="text" name="otherCourseCode" id="otherCourseCode" class="form-control" placeholder="Course code"></p>
+                  <p>Other school's name: <input type="text" name="otherSchoolName" id="otherSchoolName" class="form-control" placeholder="School name"></p>
+                  <p>SCU's course code: <input type="text" name="localCourseCode" id="localCourseCode" class="form-control" placeholder="Course code"></p>
+                  <p>Approved?</p>
+                  <input id="isApproved" name="isApproved" type="hidden">
+                  <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" id="isApprovedDropdown" data-toggle="dropdown">
+                      Select a value
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a onclick="$('#isApprovedDropdown').html('Yes<span class=\'caret\'></span>');$('#isApproved').val(1).change();">Yes</a></li>
+                      <li><a onclick="$('#isApprovedDropdown').html('No<span class=\'caret\'></span>');$('#isApproved').val(0).change();">No</a></li>
+                    </ul>
+                  </div>
+                  <p>Approver's name: <input type="text" name="approverName" id="approverName" class="form-control" placeholder="Approver's name"></p>
+                  <button class="btn btn-primary disabled" id="submitButton" type="button">Submit</button>
                 </div>
-                <p>Approver's name: <input type="text" name="approverName" class="form-control" placeholder="Approver's name"></p>
-                <button class="btn btn-primary">Submit</button>
               </div>
             </div>
-          </div>
-        </form>
+          </form>
         </div>
       <div class="col-md-9">
         <div class="well">
@@ -176,9 +176,9 @@
    */
   updateRows = function() {
     // Get the search terms.
-    var otherSchoolNamesSearch = $.trim($('#otherSchoolName').val()).replace(/ +/g, ' ').toLowerCase();
-    var otherCourseCodesSearch = $.trim($('#otherCourseCode').val()).replace(/ +/g, ' ').toLowerCase();
-    var localCourseCodesSearch = $.trim($('#localCourseCode').val()).replace(/ +/g, ' ').toLowerCase();
+    var otherSchoolNamesSearch = $.trim($('#otherSchoolNameSearch').val()).replace(/ +/g, ' ').toLowerCase();
+    var otherCourseCodesSearch = $.trim($('#otherCourseCodeSearch').val()).replace(/ +/g, ' ').toLowerCase();
+    var localCourseCodesSearch = $.trim($('#localCourseCodeSearch').val()).replace(/ +/g, ' ').toLowerCase();
 
     // Filter the table entries so that only ones that match the search terms are visible.
     $tableEntries.show().filter(function() {
@@ -209,9 +209,35 @@
   }
 
   // Any time one of the search terms is changed, update the search results.
-  $('#otherSchoolName').keyup(updateRows);
-  $('#otherCourseCode').keyup(updateRows);
-  $('#localCourseCode').keyup(updateRows);
+  $('#otherSchoolNameSearch').keyup(updateRows);
+  $('#otherCourseCodeSearch').keyup(updateRows);
+  $('#localCourseCodeSearch').keyup(updateRows);
+
+  // Helper function that updates whether the submit button may be clicked every
+  // time a user changes one of the inputs in the "create new entry" portion.
+  updateSubmitButton = function() {
+      if ($('#otherCourseCode').val() == "") {
+          $('#submitButton').addClass("disabled").prop("type", "button");
+      } else if ($('#otherSchoolName').val() == "") {
+          $('#submitButton').addClass("disabled").prop("type", "button");
+      } else if ($('#localCourseCode').val() == "") {
+          $('#submitButton').addClass("disabled").prop("type", "button");
+      } else if ($('#isApproved').val() == "") {
+          $('#submitButton').addClass("disabled").prop("type", "button");
+      } else if ($('#approverName').val() == "") {
+          $('#submitButton').addClass("disabled").prop("type", "button");
+      } else {
+          $('#submitButton').removeClass("disabled").prop("type", "submit");
+      }
+  }
+
+  // Any time one of the submit fields is changed, update whether the submit
+  // button can be clicked.
+  $('#otherCourseCode').keyup(updateSubmitButton);
+  $('#otherSchoolName').keyup(updateSubmitButton);
+  $('#localCourseCode').keyup(updateSubmitButton);
+  $('#isApproved').change(updateSubmitButton);
+  $('#approverName').keyup(updateSubmitButton);
   </script>
   </body>
 </html>

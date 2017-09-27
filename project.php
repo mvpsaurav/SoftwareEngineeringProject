@@ -64,14 +64,16 @@
     <link href="bootstrap.css" rel="stylesheet">
     <!-- Bootstrap theme -->
     <link href="bootstrap-theme.css" rel="stylesheet">
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="bootstrap.min.js"></script>
+    <!-- Some dumb custom css to make the top of the page look nicer -->
     <style>
         body {
             margin-top: 15px;
         }
     </style>
-    <!-- JQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
   </head>
 
   <body>
@@ -79,12 +81,46 @@
       <div class="row">
         <div class="col-md-3">
           <div class = "form-group">
-          <div class="well">
-            <h1>Queries:</h1>
-            <p>Other school's name: <input type="text" id="otherSchoolName" class="form-control" placeholder="School name"></p>
-            <p>Other school's course code: <input type="text" id="otherCourseCode" class="form-control" placeholder="Course code"></p>
-            <p>SCU's course code: <input type="text" id="localCourseCode" class="form-control" placeholder="Course code"></p>
-          </div>
+            <div class="well">
+              <h1>Queries:</h1>
+              <p>Other school's name: <input type="text" id="otherSchoolName" class="form-control" placeholder="School name"></p>
+              <p>Other school's course code: <input type="text" id="otherCourseCode" class="form-control" placeholder="Course code"></p>
+              <p>SCU's course code: <input type="text" id="localCourseCode" class="form-control" placeholder="Course code"></p>
+            </div>
+            <div class="well">
+              <p><button class="btn btn-default" onclick="$('#newEntryFields').toggle();" type="button">Create new entry</button></p>
+              <div id="newEntryFields" style="display: none">
+                <input type="text" placeholder="Branch ID" class="form-control">
+                <p>Other school's course code: <input type="text" id="otherCourseCode" class="form-control" placeholder="Course code"></p>
+                <p>Other school's name: <input type="text" id="otherSchoolName" class="form-control" placeholder="School name"></p>
+                <p>SCU's course code: <input type="text" id="localCourseCode" class="form-control" placeholder="Course code"></p>
+                <div class="dropdown">
+                  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" id="isApproved" data-toggle="dropdown">
+                    Approved?
+                    <span class="caret"></span>
+                  </button>
+                  <div class="dropdown-menu">
+                    <option class="dropdown-item" value="0">No</option>
+                    <option class="dropdown-item" value="1">Yes</option>
+                  </div>
+                </div>
+                <div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    Dropdown
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><a href="#">Action</a></li>
+    <li><a href="#">Another action</a></li>
+    <li><a href="#">Something else here</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="#">Separated link</a></li>
+  </ul>
+</div>
+                <p>Approver's name: <input type="text" id="approverName" class="form-control" placeholder="Approver's name"></p>
+                <button name="b" value="1" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
           </div>
         </div>
       <div class="col-md-9">

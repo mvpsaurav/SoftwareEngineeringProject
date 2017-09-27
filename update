@@ -1,0 +1,3 @@
+#!/bin/bash
+scp project.php cwalther@129.210.16.91:/webpages/cwalther/SoftwareEngineeringProject.php
+

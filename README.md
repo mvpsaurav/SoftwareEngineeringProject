@@ -2,3 +2,4 @@
 Repository for files pertaining to our COEN 174L project.
 
 ## Notes
+- TexPad for pretty things

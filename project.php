@@ -1,5 +1,32 @@
 <?php
+  // Initalize the DB connection.
+  $db_host = "dbserver.engr.scu.edu";
+  $db_user = "cwalther";
+  $db_pass = "plaintextAF";
+  $db_name = "sdb_cwalther";
+  $conn = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
 
+  // If the submit button was clicked, add a new entry to the table.
+  if(isset($_POST['otherCourseCode'])
+      && isset($_POST['otherSchoolName'])
+      && isset($_POST['localCourseCode'])
+      && isset($_POST['isApproved'])
+      && isset($_POST['approverName'])) {
+    $otherCourseCode = $conn->real_escape_string($_POST['otherCourseCode']);
+    $otherSchoolName = $conn->real_escape_string($_POST['otherSchoolName']);
+    $localCourseCode = $conn->real_escape_string($_POST['localCourseCode']);
+    $isApproved = $conn->real_escape_string($_POST['isApproved']);
+    $approverName = $conn->real_escape_string($_POST['approverName']);
+    $sql = "INSERT INTO coen174lProject
+      (otherCourseCode, otherSchool, localCourseCode, isApproved, approvedBy)
+      VALUES('"
+      . $otherCourseCode . "', '"
+      . $otherSchoolName . "', '"
+      . $localCourseCode . "', "
+      . $isApproved . ", '"
+      . $approverName . "')";
+    $result = $conn->query($sql);
+  }
 ?>
 
 <html lang="en">
@@ -30,10 +57,19 @@
   </head>
 
   <body>
+<?php
+  if (isset($result) && $result == false) {
+      echo '<div class="alert alert-danger alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      There was a problem adding the entry.  Make sure you entered your values correctly and try again.
+      </div>';
+  }
+?>
 	<div class="container-fluid">
       <div class="row">
         <div class="col-md-3">
-          <div class = "form-group">
+          <form action="SoftwareEngineeringProject.php" method="POST">
+          <div class="form-group">
             <div class="well">
               <h1>Queries:</h1>
               <p>Other school's name: <input type="text" id="otherSchoolName" class="form-control" placeholder="School name"></p>
@@ -43,25 +79,27 @@
             <div class="well">
               <p><button class="btn btn-default" onclick="$('#newEntryFields').toggle();" type="button">Create new entry</button></p>
               <div id="newEntryFields" style="display: none">
-                <p>Other school's course code: <input type="text" id="otherCourseCode" class="form-control" placeholder="Course code"></p>
-                <p>Other school's name: <input type="text" id="otherSchoolName" class="form-control" placeholder="School name"></p>
-                <p>SCU's course code: <input type="text" id="localCourseCode" class="form-control" placeholder="Course code"></p>
+                <p>Other school's course code: <input type="text" name="otherCourseCode" class="form-control" placeholder="Course code"></p>
+                <p>Other school's name: <input type="text" name="otherSchoolName" class="form-control" placeholder="School name"></p>
+                <p>SCU's course code: <input type="text" name="localCourseCode" class="form-control" placeholder="Course code"></p>
                 <p>Approved?</p>
+                <input id="isApproved" name="isApproved" type="hidden">
                 <div class="dropdown">
-                  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" id="isApproved" data-toggle="dropdown">
+                  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" id="isApprovedDropdown" data-toggle="dropdown">
                     Approved?
                     <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu">
-                    <li><a onclick="$('#isApproved').html('Yes<span class=\'caret\'></span>');$('#isApproved').val(1);">Yes</a></li>
-                    <li><a onclick="$('#isApproved').html('No<span class=\'caret\'></span>');$('#isApproved').val(0);">No</a></li>
+                    <li><a onclick="$('#isApprovedDropdown').html('Yes<span class=\'caret\'></span>');$('#isApproved').val(1);">Yes</a></li>
+                    <li><a onclick="$('#isApprovedDropdown').html('No<span class=\'caret\'></span>');$('#isApproved').val(0);">No</a></li>
                   </ul>
                 </div>
-                <p>Approver's name: <input type="text" id="approverName" class="form-control" placeholder="Approver's name"></p>
-                <button name="b" value="1" class="btn btn-primary">Submit</button>
+                <p>Approver's name: <input type="text" name="approverName" class="form-control" placeholder="Approver's name"></p>
+                <button class="btn btn-primary">Submit</button>
               </div>
             </div>
           </div>
+        </form>
         </div>
       <div class="col-md-9">
         <div class="well">
@@ -114,13 +152,6 @@
     # Terminate the table.
     echo '</tbody></table>';
   }
-
-  $db_host = "dbserver.engr.scu.edu";
-  $db_user = "cwalther";
-  $db_pass = "plaintextAF";
-  $db_name = "sdb_cwalther";
-
-  $conn = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
 
   $query = "SELECT * FROM coen174lProject";
 
@@ -184,3 +215,7 @@
   </script>
   </body>
 </html>
+<?php
+  // Close the DB connection.
+  $conn->close();
+?>

@@ -104,6 +104,31 @@
       <div class="col-md-9">
         <div class="well">
 <?php
+  # Utility function for doing a regex match that will a split a string into its
+  # parts assuming the parts are delimited by camelCasing or by underscores.
+  function MatchByUnderscoresOrCamelCase($pattern, $string) {
+    $matches = [];
+    preg_match_all($pattern, $string, $matches, PREG_OFFSET_CAPTURE);
+    $matches = $matches[0];
+    $words = [];
+    $firstWord = substr($string, 0, $matches[0][1]);
+    array_push($words, $firstWord);
+    $end = strlen($firstWord);
+    for ($i = 0; $i < count($matches) - 1; $i++) {
+        if ($matches[$i][1] == "_") {
+          $start = $matches[$i][1] + 1;
+        } else {
+          $start = $matches[$i][1];
+        }
+        $end = $matches[$i + 1][1];
+        array_push($words, substr($string, $start, $end - $start));
+    }
+    if (count($matches) > 0) {
+        array_push($words, substr($string, $end));
+    }
+    return $words;
+  }
+
   # Function for displaying the results of a MySQL query result object nicely,
   # using Bootstrap's table styling.
   function DisplayResults($results) {
@@ -129,8 +154,14 @@
     # Iterate through and print the names of each field, as the table headers.
     $results->data_seek(0);
     foreach($results->fetch_assoc() as $key => $value) {
-      $key = str_replace("_", " ", $key);
-      echo '<th>' . $key . '</th>' . "\n";
+      # Split the name of the column by either underscores or camelCasing.
+      $pattern = "/(?<=[a-z])(?=[A-Z])|_/";
+      $words = MatchByUnderscoresOrCamelCase($pattern, $key);
+      echo '<th>';
+      foreach ($words as $word) {
+        echo ucwords($word) . ' ';
+      }
+      echo "</th>\n";
     }
     echo '</tr></thead><tbody id="results">';
 

@@ -103,7 +103,7 @@
           </form>
         </div>
       <div class="col-md-9">
-        <div class="well">
+        <div id="tableResults" class="well">
 <!-- PUT TABLE RESULTS HERE -->
         </div>
       </div>
@@ -111,44 +111,20 @@
   </div>
 
   <script>
-  // Get all the rows from the table.
-  var $tableEntries = $('#results tr');
-
   /**
    * Updates the table of results to only contain results that match what is entered in the search boxes.
    */
   updateRows = function() {
-    // Get the search terms.
-    var otherSchoolNamesSearch = $.trim($('#otherSchoolNameSearch').val()).replace(/ +/g, ' ').toLowerCase();
-    var otherCourseCodesSearch = $.trim($('#otherCourseCodeSearch').val()).replace(/ +/g, ' ').toLowerCase();
-    var localCourseCodesSearch = $.trim($('#localCourseCodeSearch').val()).replace(/ +/g, ' ').toLowerCase();
-
-    // Filter the table entries so that only ones that match the search terms are visible.
-    $tableEntries.show().filter(function() {
-      // For each particular row, split the row up into an array, where each entry is a column in the table.
-      var columns = $.trim($(this).text().split("\n")).split(",");
-      var otherCourseCode = $.trim(columns[0]).toLowerCase();
-      var otherSchoolName = $.trim(columns[1]).toLowerCase();
-      var localCourseCode = $.trim(columns[2]).toLowerCase();
-
-      // Check to see if any of the search terms do not match.  If so, return true, so we hide all of the
-      // entries that are not a match.
-      var otherSchoolNameMatches = !~otherSchoolName.indexOf(otherSchoolNamesSearch);
-      var otherCourseCodeMatches = !~otherCourseCode.indexOf(otherCourseCodesSearch);
-      var localCourseCodeMatches = !~localCourseCode.indexOf(localCourseCodesSearch);
-      return otherSchoolNameMatches || otherCourseCodeMatches || localCourseCodeMatches;
-    }).hide();
-
-    // Update the number of results of the search.
-    var numOfVisibleRows = $('#results tr:visible').length;
-    console.log("numResults: " + numOfVisibleRows);
-    if (numOfVisibleRows < 1) {
-        $('#numResults').html("No results");
-    } else if (numOfVisibleRows == 1) {
-        $('#numResults').html("1 result");
-    } else {
-        $('#numResults').html(numOfVisibleRows + " results");
-    }
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("tableResults").innerHTML = this.responseText;
+      }
+    };
+    xhttp.open("GET", "EquivalenciesTable.php?otherSchoolName=" + $('#otherSchoolNameSearch').val()
+      + "&otherCourseCode=" + $('#otherCourseCodeSearch').val()
+      + "&localCourseCode=" + $('#localCourseCodeSearch').val());
+    xhttp.send();
   }
 
   // Any time one of the search terms is changed, update the search results.

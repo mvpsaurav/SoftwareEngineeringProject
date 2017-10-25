@@ -7,14 +7,26 @@
   $conn = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
 
   if ($conn != false) {
-    $otherSchoolName = $conn->real_escape_string($_GET['otherSchoolName']);
-    $otherCourseCode = $conn->real_escape_string($_GET['otherCourseCode']);
-    $localCourseCode = $conn->real_escape_string($_GET['localCourseCode']);
+    if (isset($_GET['otherSchoolName'])) {
+      $otherSchoolName = $conn->real_escape_string($_GET['otherSchoolName']);
+    } else {
+      $otherSchoolName = "";
+    }
+    if (isset($_GET['otherCourseCode'])) {
+      $otherCourseCode = $conn->real_escape_string($_GET['otherCourseCode']);
+    } else {
+      $otherCourseCode = "";
+    }
+    if (isset($_GET['localCourseCode'])) {
+      $localCourseCode = $conn->real_escape_string($_GET['localCourseCode']);
+    } else {
+      $localCourseCode = "";
+    }
 
     $query = "SELECT * FROM coen174lProject "
-      . "WHERE otherSchoolName LIKE '%" . $otherSchoolName . "%' "
+      . "WHERE otherSchool LIKE '%" . $otherSchoolName . "%' "
       . "AND otherCourseCode LIKE '%" . $otherCourseCode . "%' "
-      . "AND localCourseCode LIKE '%" . $localCourseCode . "%'"
+      . "AND localCourseCode LIKE '%" . $localCourseCode . "%'";
 
     $result = $conn->query($query);
     DisplayResults($result);

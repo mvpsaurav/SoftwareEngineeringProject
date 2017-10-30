@@ -1,35 +1,3 @@
-<?php
-  // Initalize the DB connection.
-  $db_host = "dbserver.engr.scu.edu";
-  $db_user = "cwalther";
-  $db_pass = "plaintextAF";
-  $db_name = "sdb_cwalther";
-  $conn = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
-
-  // If the submit button was clicked, add a new entry to the table.
-  if(isset($_POST['otherCourseCode'])
-      && isset($_POST['otherSchoolName'])
-      && isset($_POST['localCourseCode'])
-      && isset($_POST['isApproved'])
-      && isset($_POST['approverName'])) {
-    $otherCourseCode = $conn->real_escape_string($_POST['otherCourseCode']);
-    $otherSchoolName = $conn->real_escape_string($_POST['otherSchoolName']);
-    $localCourseCode = $conn->real_escape_string($_POST['localCourseCode']);
-    $isApproved = $conn->real_escape_string($_POST['isApproved']);
-    $approverName = $conn->real_escape_string($_POST['approverName']);
-    $sql = "INSERT INTO coen174lProject
-      (otherCourseCode, otherSchool, localCourseCode, isApproved, approvedBy)
-      VALUES('"
-      . $otherCourseCode . "', '"
-      . $otherSchoolName . "', '"
-      . $localCourseCode . "', "
-      . $isApproved . ", '"
-      . $approverName . "')";
-    $result = $conn->query($sql);
-  }
-  $conn->close();
-?>
-
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -58,18 +26,9 @@
   </head>
 
   <body>
-<?php
-  if (isset($result) && $result == false) {
-      echo '<div class="alert alert-danger alert-dismissible" role="alert">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-      There was a problem adding the entry.  Make sure you entered your values correctly and try again.
-      </div>';
-  }
-?>
 	<div class="container-fluid">
       <div class="row">
         <div class="col-md-3">
-          <form action="SoftwareEngineeringProject.php" method="POST">
             <div class="form-group">
               <div class="well">
                 <h1>Filter by:</h1>
@@ -96,11 +55,11 @@
                     </ul>
                   </div>
                   <p>Approver's name: <input type="text" name="approverName" id="approverName" class="form-control" placeholder="Approver's name"></p>
-                  <button class="btn btn-primary disabled" id="submitButton" type="button">Submit</button>
+                  <button class="btn btn-primary disabled" id="submitButton" onclick="addNewEquivalency();">Submit</button>
                 </div>
               </div>
-            </div>
-          </form>
+          </div>
+          <div id="alertSection"></div>
         </div>
       <div class="col-md-9">
         <div id="tableResults" class="well">
@@ -121,11 +80,29 @@
         document.getElementById("tableResults").innerHTML = this.responseText;
       }
     };
-    xhttp.open("GET", "EquivalenciesTable.php?otherSchoolName=" + $('#otherSchoolNameSearch').val()
-      + "&otherCourseCode=" + $('#otherCourseCodeSearch').val()
+    xhttp.open("GET", "EquivalenciesTable.php?otherCourseCode=" + $('#otherCourseCodeSearch').val()
+      + "&otherSchoolName=" + $('#otherSchoolNameSearch').val()
       + "&localCourseCode=" + $('#localCourseCodeSearch').val());
     xhttp.send();
   }
+
+  /**
+   * Inserts a new row into the equivalencies table.
+   */
+   addNewEquivalency = function() {
+       var xhttp = new XMLHttpRequest();
+       xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+           document.getElementById("alertSection").innerHTML = this.responseText;
+         }
+       };
+       xhttp.open("GET", "AddNewEquivalency.php?otherSchoolName=" + $('#otherSchoolName').val()
+         + "&otherCourseCode=" + $('#otherCourseCode').val()
+         + "&localCourseCode=" + $('#localCourseCode').val()
+         + "&isApproved=" + $('#isApproved').val()
+         + "&approverName=" + $('#approverName').val());
+       xhttp.send();
+   }
 
   // Any time one of the search terms is changed, update the search results.
   $('#otherSchoolNameSearch').keyup(updateRows);

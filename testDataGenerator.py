@@ -33,7 +33,7 @@ def generateQueriesToFile(outputFile, numQueries):
     '''
     # Delete and create the table, to make sure only the given test data is
     # entered into the table.
-    tableName = "coen174lProject"
+    tableName = "COEN174CourseEquivalencies"
     generateDeleteAndCreateTableQueries(outputFile, tableName)
     courseCodeNumbers = (101, 102, 201, 50, 51, 52, 11, 12, 13, 14, '11A',
                          '11B', '11C')
@@ -64,7 +64,7 @@ def generateQueriesToFile(outputFile, numQueries):
         professor = random.choice(professors)
 
         # Construct the SQL statement.
-        sqlStatement = "INSERT INTO coen174lProject (otherCourseCode, " \
+        sqlStatement = "INSERT INTO {} (otherCourseCode, ".format(tableName) \
             + "otherSchool, localCourseCode, isApproved, approvedBy) " \
             + "VALUES('{}', '{}', '{}', {}, '{}');".format(otherCourseCode,
                                                            otherSchoolName,

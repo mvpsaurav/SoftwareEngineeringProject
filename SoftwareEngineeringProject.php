@@ -152,6 +152,7 @@
             }
         }
         xhttp.open("POST", "RemoveEquivalency.php");
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("otherCourseCode=" + occ
             + "&otherSchoolName=" + os
             + "&localCourseCode=" + lcc

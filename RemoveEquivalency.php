@@ -2,6 +2,20 @@
     include 'HelperFunctions.php';
 
     session_start();
+    // $my_file = 'debug.log';
+    // $handle = fopen($my_file, 'w');
+    // fwrite($handle, isset($_POST['otherCourseCode']));
+    // fwrite($handle, "\n");
+    // fwrite($handle, isset($_POST['otherSchoolName']));
+    // fwrite($handle, "\n");
+    // fwrite($handle, isset($_POST['localCourseCode']));
+    // fwrite($handle, "\n");
+    // fwrite($handle, isset($_POST['isApproved']));
+    // fwrite($handle, "\n");
+    // fwrite($handle, isset($_SESSION['loggedIn']));
+    // fwrite($handle, "\n");
+    // fwrite($handle, $_SESSION['loggedIn']);
+    // fwrite($handle, "\n");
 
     // If the submit button was clicked, add a new entry to the table.
     if(isset($_POST['otherCourseCode'])
@@ -31,6 +45,7 @@
             . "AND isApproved = $isApproved "
             . "AND approvedBy = '" . $_SESSION['realName'] . "'";
         echo $sql;
+        // fwrite($handle, $sql);
         if ($conn->query($sql) == false) {
             EchoDismissableAlert("There was a problem removing the entry.  Make sure you entered your
             values correctly and try again.");
@@ -39,9 +54,9 @@
             EchoDismissableSuccess("Equivalency successfully removed.");
         }
 
-        // FOR TESTING TODO: remove this
-        http_response_code(500);
         $conn->close();
+    } else {
+        http_response_code(500);
     }
 ?>
 

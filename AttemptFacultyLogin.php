@@ -24,11 +24,14 @@
                 $_SESSION["loggedIn"] = true;
                 $_SESSION["username"] = $row['Username'];
                 $_SESSION["realName"] = $row['RealName'];
+                header("LoggedIn: true");
                 EchoDismissableSuccess("Logging in...");
             } else {
+                header("LoggedIn: false");
                 EchoDismissableAlert("Password is invalid.");
             }
         } else {
+            header("LoggedIn: false");
             EchoDismissableAlert("Username is invalid.");
         }
 

@@ -1,7 +1,10 @@
 <?php
+    session_start();
     if(isset($_POST['username'])
             && isset($_POST['password'])
-            && isset($_POST['realName'])) {
+            && isset($_POST['realName'])
+            && isset($_SESSION['loggedIn'])
+            && $_SESSION['loggedIn'] == true) {
         // Initalize the DB connection.
         $db_host = "dbserver.engr.scu.edu";
         $db_user = "cwalther";

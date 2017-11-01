@@ -41,6 +41,7 @@
     if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
         echo "<div class=\"well\">
             <p>Logged in as " . $_SESSION['realName'] . " (" . $_SESSION['username'] . ")</p>
+            <p><button class=\"btn btn-info\" onclick=\"logout();\" type=\"button\">Logout</button></p>
             <p><button class=\"btn btn-default\" onclick=\"$('#newEntryFields').toggle();\" type=\"button\">Create new entry</button></p>
             <div id=\"newEntryFields\" style=\"display: none\">
                 <p>Other school's course code: <input type=\"text\" name=\"otherCourseCode\" id=\"otherCourseCode\" class=\"form-control\" placeholder=\"Course code\"></p>
@@ -85,13 +86,27 @@
                     + \"&approverName=\" + $('#approverName').val());
             xhttp.send();
         }
+
+        /**
+        * Logs out the faculty user.
+        */
+        logout = function() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                    location.reload(true);
+                }
+            };
+            xhttp.open(\"GET\", \"Logout.php\");
+            xhttp.send();
+        }
         </script>";
     } else {
         echo "<div class=\"well\">
             <p><button class=\"btn btn-default\" onclick=\"$('#facultyLogin').toggle();\" type=\"button\">Faculty login</button></p>
             <div id=\"facultyLogin\" style=\"display:none\">
                 <p>Username: <input type=\"text\" id=\"username\" class=\"form-control\" placeholder=\"Username\"></p>
-                <p>Password: <input type=\"text\" id=\"password\" class=\"form-control\" placeholder=\"Password\"></p>
+                <p>Password: <input type=\"password\" id=\"password\" class=\"form-control\" placeholder=\"Password\"></p>
                 <button class=\"btn btn-primary\" id=\"facultyLoginButton\" onclick=\"loginFacultyMember();\">Submit</button>
             </div>
         </div>
@@ -174,6 +189,9 @@
     $('#localCourseCode').keyup(updateSubmitButton);
     $('#isApproved').change(updateSubmitButton);
     $('#approverName').keyup(updateSubmitButton);
+
+    // Run this when the page loads.
+    window.onload = updateRows;
     </script>
     </body>
 </html>

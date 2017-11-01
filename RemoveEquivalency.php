@@ -2,20 +2,6 @@
     include 'HelperFunctions.php';
 
     session_start();
-    // $my_file = 'debug.log';
-    // $handle = fopen($my_file, 'w');
-    // fwrite($handle, isset($_POST['otherCourseCode']));
-    // fwrite($handle, "\n");
-    // fwrite($handle, isset($_POST['otherSchoolName']));
-    // fwrite($handle, "\n");
-    // fwrite($handle, isset($_POST['localCourseCode']));
-    // fwrite($handle, "\n");
-    // fwrite($handle, isset($_POST['isApproved']));
-    // fwrite($handle, "\n");
-    // fwrite($handle, isset($_SESSION['loggedIn']));
-    // fwrite($handle, "\n");
-    // fwrite($handle, $_SESSION['loggedIn']);
-    // fwrite($handle, "\n");
 
     // If the submit button was clicked, add a new entry to the table.
     if(isset($_POST['otherCourseCode'])

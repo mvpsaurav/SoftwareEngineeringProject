@@ -1,6 +1,6 @@
 <?php
     include 'HelperFunctions.php';
-    
+
     session_start();
 
     // If the submit button was clicked, add a new entry to the table.
@@ -37,7 +37,7 @@
             values correctly and try again.");
         } else {
             EchoDismissableSuccess("Equivalency successfully added.");
-
+            header("Success: true");
         }
 
         $conn->close();

@@ -1,4 +1,6 @@
 <?php
+    session_start();
+
     // Initalize the DB connection.
     $db_host = "dbserver.engr.scu.edu";
     $db_user = "cwalther";
@@ -8,15 +10,17 @@
 
     // If the submit button was clicked, add a new entry to the table.
     if(isset($_GET['otherCourseCode'])
-        && isset($_GET['otherSchoolName'])
-        && isset($_GET['localCourseCode'])
-        && isset($_GET['isApproved'])
-        && isset($_GET['approverName'])) {
+            && isset($_GET['otherSchoolName'])
+            && isset($_GET['localCourseCode'])
+            && isset($_GET['isApproved'])
+            && isset($_SESSION['loggedIn'])
+            && $_SESSION['loggedIn'] == true) {
         $otherCourseCode = $conn->real_escape_string($_GET['otherCourseCode']);
         $otherSchoolName = $conn->real_escape_string($_GET['otherSchoolName']);
         $localCourseCode = $conn->real_escape_string($_GET['localCourseCode']);
         $isApproved = $conn->real_escape_string($_GET['isApproved']);
-        $approverName = $conn->real_escape_string($_GET['approverName']);
+
+        // Get approver name from the users table.
         $sql = "INSERT INTO COEN174CourseEquivalencies
                 (otherCourseCode, otherSchool, localCourseCode, isApproved, approvedBy)
                 VALUES('"
@@ -24,7 +28,7 @@
                 . $otherSchoolName . "', '"
                 . $localCourseCode . "', "
                 . $isApproved . ", '"
-                . $approverName . "')";
+                . $_SESSION['realName'] . "')";
         if ($conn->query($sql) == false) {
             echo '<div class="alert alert-danger alert-dismissible">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -37,6 +41,6 @@
             </div>';
         }
     }
-    
+
     $conn->close();
 ?>

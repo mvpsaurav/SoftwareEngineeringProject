@@ -1,22 +1,24 @@
 import random
 
 
-def generateDeleteAndCreateTableQueries(outputFile, tableName):
+def generateDeleteAndCreateTableQueries(outputFile, usersTableName,
+                                        equivsTableName):
     ''' A utility function for generate SQL queries that create a table with the
     specified name, dropping the table if it already exists.
 
     @param outputFile: The file to write the queries to.
     @param tableName: The name of the table to create.
     '''
-    sqlStatement = "DROP TABLE IF EXISTS {};".format(tableName)
+    sqlStatement = "DROP TABLE IF EXISTS {};".format(equivsTableName)
     outputFile.write(sqlStatement)
     outputFile.write("\n")
-    sqlStatement = "CREATE TABLE IF NOT EXISTS {} (".format(tableName) \
-        + "otherCourseCode varchar(20), " \
-        + "otherSchool varchar(100), " \
-        + "localCourseCode varchar(20), " \
-        + "isApproved tinyint(1), " \
-        + "approvedBy varchar(100), " \
+    sqlStatement = "CREATE TABLE IF NOT EXISTS {} (".format(equivsTableName) \
+        + "OtherCourseCode varchar(20), " \
+        + "OtherSchool varchar(100), " \
+        + "LocalCourseCode varchar(20), " \
+        + "IsApproved tinyint(1), " \
+        + "ApprovedBy varchar(100) REFERENCES {} (RealName), ".format(
+            usersTableName) \
         + "PRIMARY KEY (otherCourseCode, otherSchool, localCourseCode, " \
         + "isApproved, approvedBy)" \
         + ");"
@@ -33,8 +35,10 @@ def generateQueriesToFile(outputFile, numQueries):
     '''
     # Delete and create the table, to make sure only the given test data is
     # entered into the table.
-    tableName = "COEN174CourseEquivalencies"
-    generateDeleteAndCreateTableQueries(outputFile, tableName)
+    equivsTableName = "COEN174CourseEquivalencies"
+    usersTableName = "COEN174FacultyUsers"
+    generateDeleteAndCreateTableQueries(outputFile, usersTableName,
+                                        equivsTableName)
     courseCodeNumbers = (101, 102, 201, 50, 51, 52, 11, 12, 13, 14, '11A',
                          '11B', '11C')
     courseCodePrefices = ("COEN", "CSCI", "CS", "ELEN", "ENGR", "MATH")
@@ -64,13 +68,14 @@ def generateQueriesToFile(outputFile, numQueries):
         professor = random.choice(professors)
 
         # Construct the SQL statement.
-        sqlStatement = "INSERT INTO {} (otherCourseCode, ".format(tableName) \
-            + "otherSchool, localCourseCode, isApproved, approvedBy) " \
-            + "VALUES('{}', '{}', '{}', {}, '{}');".format(otherCourseCode,
-                                                           otherSchoolName,
-                                                           localCourseCode,
-                                                           isApproved,
-                                                           professor)
+        sqlStatement = "INSERT INTO {} ".format(equivsTableName) \
+            + "(otherCourseCode, otherSchool, localCourseCode, isApproved, " \
+            + "approvedBy) VALUES('{}', '{}', '{}', {}, '{}');".format(
+                otherCourseCode,
+                otherSchoolName,
+                localCourseCode,
+                isApproved,
+                professor)
 
         # Write the SQL statement to the file.
         outputFile.write(sqlStatement)

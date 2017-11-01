@@ -6,5 +6,4 @@
         session_unset();
         session_destroy();
     }
-    http_response_code(404);
 ?>

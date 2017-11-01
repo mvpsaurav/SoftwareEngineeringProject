@@ -59,7 +59,6 @@
                         <li><a onclick=\"$('#isApprovedDropdown').html('No<span class=\'caret\'></span>');$('#isApproved').val(0).change();\">No</a></li>
                     </ul>
                 </div>
-                <p>Approver's name: <input type=\"text\" name=\"approverName\" id=\"approverName\" class=\"form-control\" placeholder=\"Approver's name\"></p>
                 <button class=\"btn btn-primary disabled\" id=\"submitButton\" onclick=\"addNewEquivalency();\">Submit</button>
             </div>
         </div>
@@ -82,8 +81,7 @@
             xhttp.open(\"GET\", \"AddNewEquivalency.php?otherSchoolName=\" + $('#otherSchoolName').val()
                     + \"&otherCourseCode=\" + $('#otherCourseCode').val()
                     + \"&localCourseCode=\" + $('#localCourseCode').val()
-                    + \"&isApproved=\" + $('#isApproved').val()
-                    + \"&approverName=\" + $('#approverName').val());
+                    + \"&isApproved=\" + $('#isApproved').val());
             xhttp.send();
         }
 
@@ -175,8 +173,6 @@
             $('#submitButton').addClass("disabled").prop("type", "button");
         } else if ($('#isApproved').val() == "") {
             $('#submitButton').addClass("disabled").prop("type", "button");
-        } else if ($('#approverName').val() == "") {
-            $('#submitButton').addClass("disabled").prop("type", "button");
         } else {
             $('#submitButton').removeClass("disabled").prop("type", "submit");
         }
@@ -188,7 +184,6 @@
     $('#otherSchoolName').keyup(updateSubmitButton);
     $('#localCourseCode').keyup(updateSubmitButton);
     $('#isApproved').change(updateSubmitButton);
-    $('#approverName').keyup(updateSubmitButton);
 
     // Run this when the page loads.
     window.onload = updateRows;

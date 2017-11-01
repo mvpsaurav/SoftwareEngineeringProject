@@ -1,4 +1,6 @@
 <?php
+    session_start();
+
     // Initalize the DB connection.
     $db_host = "dbserver.engr.scu.edu";
     $db_user = "cwalther";
@@ -93,6 +95,10 @@
             }
             echo "</th>\n";
         }
+        if (isset($_SESSION['loggedIn'])
+                && $_SESSION['loggedIn'] == true) {
+            echo '<th>Delete this entry</th>';
+        }
         echo '</tr></thead><tbody id="results">';
 
         # Iterate through and print the contents of each field.
@@ -107,6 +113,20 @@
                 }
                 echo '<td>' . $value . '</td>' . "\n";
             }
+            echo '<td>';
+            if (isset($_SESSION['loggedIn'])
+                    && $_SESSION['loggedIn'] == true
+                    && isset($row['ApprovedBy'])
+                    && $_SESSION['realName'] == $row['ApprovedBy']) {
+                echo '<button class="btn btn-warning" type="button" onclick="deleteEquivalency(\''
+                . $row['OtherCourseCode'] . '\', \''
+                . $row['OtherSchool'] . '\', \''
+                . $row['LocalCourseCode'] . '\', '
+                . $row['IsApproved'] . ')">
+                Delete
+                </button>';
+            }
+            echo '</td>';
             echo '</tr>';
         }
 

@@ -141,6 +141,23 @@
         </div>
 
     <script>
+    /**<
+    * Deletes an equivalency.
+    */
+    deleteEquivalency = function(occ, os, lcc, ia) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                window.location.reload();
+            }
+        }
+        xhttp.open("POST", "RemoveEquivalency.php");
+        xhttp.send("otherCourseCode=" + occ
+            + "&otherSchoolName=" + os
+            + "&localCourseCode=" + lcc
+            + "&isApproved=" + ia);
+    }
+
     /**
     * Updates the table of results to only contain results that match what is entered in the search boxes.
     */

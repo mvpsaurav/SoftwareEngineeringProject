@@ -58,19 +58,30 @@
     /**
     * Deletes an equivalency.
     */
-    deleteEquivalency = function(occ, os, lcc, ia) {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-                window.location.reload();
-            }
-        }
-        xhttp.open("POST", "RemoveEquivalency.php");
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send("otherCourseCode=" + occ
+    deleteEquivalency = function(occ, os, lcc, ia, ab) {
+        // var xhttp = new XMLHttpRequest();
+        // xhttp.onreadystatechange = function() {
+        //     if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+        //         window.location.reload();
+        //     }
+        // }
+        // xhttp.open("GET", "Equivalency.php");
+        // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        // xhttp.send("otherCourseCode=" + occ
+        //     + "&otherSchoolName=" + os
+        //     + "&localCourseCode=" + lcc
+        //     + "&isApproved=" + ia
+        //     + "&approvedBy=" + ab);
+        // console.log("otherCourseCode=" + occ
+        //     + "&otherSchoolName=" + os
+        //     + "&localCourseCode=" + lcc
+        //     + "&isApproved=" + ia
+        //     + "&approvedBy=" + ab);
+        window.location = "Equivalency.php?otherCourseCode=" + occ
             + "&otherSchoolName=" + os
             + "&localCourseCode=" + lcc
-            + "&isApproved=" + ia);
+            + "&isApproved=" + ia
+            + "&approvedBy=" + ab;
     }
 
     /**

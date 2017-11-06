@@ -1,58 +1,33 @@
 <?php
+    include 'HelperFunctions.php';
+
     session_start();
-    if(isset($_POST['username'])
-            && isset($_POST['password'])
-            && isset($_POST['realName'])
-            && isset($_SESSION['loggedIn'])
-            && $_SESSION['loggedIn'] == true) {
-        // Initalize the DB connection.
-        $db_host = "dbserver.engr.scu.edu";
-        $db_user = "cwalther";
-        $db_pass = "plaintextAF";
-        $db_name = "sdb_cwalther";
-        $conn = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
 
-        // Extract variables from post parameters.
-        $username = $conn->real_escape_string($_POST['username']);
-        $password = $conn->real_escape_string($_POST['password']);
-        $realName = $conn->real_escape_string($_POST['realName']);
+    // Initalize the DB connection.
+    $db_host = "dbserver.engr.scu.edu";
+    $db_user = "cwalther";
+    $db_pass = "plaintextAF";
+    $db_name = "sdb_cwalther";
+    $conn = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
 
-        // Do some data validation.
-        if (strlen($username) < 1
-                || strlen($password) < 1
-                || strlen($realName) < 1) {
-            echo 'check your inputs';
-            header("Location: SoftwareEngineeringProject.php");
-        }
+    // Validate variables.
+    $otherCourseCode = $conn->real_escape_string($_GET['otherCourseCode']);
+    $otherSchoolName = $conn->real_escape_string($_GET['otherSchoolName']);
+    $localCourseCode = $conn->real_escape_string($_GET['localCourseCode']);
+    $isApproved = $conn->real_escape_string($_GET['isApproved']);
+    $approvedBy = $conn->real_escape_string($_GET['approvedBy']);
 
-        // Determine salt.
-        $salt = "";
-        for ($i = 0; $i < 64; $i++) {
-            $salt .= (string) rand(0, 9);
-        }
-        echo "\$salt: $salt\n";
-        $hashedAndSaltedPassword = hash("sha256", $password . $salt);
+    $sql = "SELECT * FROM COEN174CourseEquivalencies "
+        . "WHERE OtherCourseCode = '$otherCourseCode' "
+        . "AND OtherSchool = '$otherSchoolName' "
+        . "AND LocalCourseCode = '$localCourseCode' "
+        . "AND IsApproved = '$isApproved' "
+        . "AND ApprovedBy = '$approvedBy'";
 
-        // Log in the user, if possible.
-        $sql = "INSERT INTO COEN174FacultyUsers "
-                . "(Username, HashedPassword, Salt, RealName) "
-                . "VALUES('"
-                . $username . "', '"
-                . $hashedAndSaltedPassword . "', '"
-                . $salt . "', '"
-                . $realName . "')";
-        echo "\n" . $sql;
-        $result = $conn->query($sql);
-        if ($result != false) {
-            echo 'Success';
-        } else {
-            echo 'error';
-            echo $conn->error;
-        }
-
-        $conn->close();
-        header("Location: SoftwareEngineeringProject.php");
-    }
+    $handle = fopen('debug.log', 'w');
+    fwrite($handle, $sql);
+    $result = $conn->query($sql);
+    DisplayResults($result);
 ?>
 
 <html lang="en">

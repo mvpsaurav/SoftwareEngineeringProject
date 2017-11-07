@@ -27,7 +27,12 @@
     $handle = fopen('debug.log', 'w');
     fwrite($handle, $sql);
     $result = $conn->query($sql);
-    DisplayResults($result);
+    if (isset($_SESSION['loggedIn'])
+            && $_SESSION['loggedIn'] == true) {
+        DisplayResults($result, true, true);
+    } else {
+        DisplayResults($result, false, true);
+    }
 ?>
 
 <html lang="en">
@@ -75,4 +80,32 @@
             </div>
         </div>
     </body>
+
+    <script>
+
+    /**
+    * Deletes an equivalency.
+    */
+    deleteEquivalency = function(occ, os, lcc, ia, ab) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                window.location = "SoftwareEngineeringProject.php";
+            }
+        }
+        xhttp.open("GET", "RemoveEquivalency.php");
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("otherCourseCode=" + occ
+            + "&otherSchoolName=" + os
+            + "&localCourseCode=" + lcc
+            + "&isApproved=" + ia
+            + "&approvedBy=" + ab);
+        console.log("otherCourseCode=" + occ
+            + "&otherSchoolName=" + os
+            + "&localCourseCode=" + lcc
+            + "&isApproved=" + ia
+            + "&approvedBy=" + ab);
+    }
+
+    </script>
 </html>

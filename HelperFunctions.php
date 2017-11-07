@@ -156,7 +156,7 @@
 
     # Function for displaying the results of a MySQL query result object nicely,
     # using Bootstrap's table styling.
-    function DisplayResults($results) {
+    function DisplayResults($results, $canDelete = false, $detailed = false) {
         # Check if the query failed.
         if(!$results) {
             echo '<h1>Something went wrong with the query.</h1>';
@@ -189,8 +189,13 @@
             echo "</th>\n";
         }
         if (isset($_SESSION['loggedIn'])
-                && $_SESSION['loggedIn'] == true) {
+                && $_SESSION['loggedIn'] == true
+                && $canDelete == true
+                && isset($row['ApprovedBy'])
+                && $_SESSION['realName'] == $row['ApprovedBy']) {
             echo '<th>Delete this entry</th>';
+        } else if ($detailed == false) {
+            echo '<th>Detailed view</th>';
         }
         echo '</tr></thead><tbody id="results">';
 
@@ -209,9 +214,10 @@
             echo '<td>';
             if (isset($_SESSION['loggedIn'])
                     && $_SESSION['loggedIn'] == true
+                    && $canDelete == true
                     && isset($row['ApprovedBy'])
                     && $_SESSION['realName'] == $row['ApprovedBy']) {
-                echo '<button class="btn btn-warning" type="button" onclick="deleteEquivalency(\'';
+                echo '<button class="btn btn-danger" type="button" onclick="deleteEquivalency(\'';
                 echo EscapeStringForFunctionCall($row['OtherCourseCode']);
                 echo '\', \'';
                 echo EscapeStringForFunctionCall($row['OtherSchool']);
@@ -223,6 +229,20 @@
                 echo EscapeStringForFunctionCall($row['ApprovedBy']);
                 echo '\')">
                 Delete
+                </button>';
+            } else if ($detailed == false) {
+                echo '<button class="btn btn-info" type="button" onclick="viewEquivalency(\'';
+                echo EscapeStringForFunctionCall($row['OtherCourseCode']);
+                echo '\', \'';
+                echo EscapeStringForFunctionCall($row['OtherSchool']);
+                echo '\', \'';
+                echo EscapeStringForFunctionCall($row['LocalCourseCode']);
+                echo '\', ';
+                echo EscapeStringForFunctionCall($row['IsApproved']);
+                echo ', \'';
+                echo EscapeStringForFunctionCall($row['ApprovedBy']);
+                echo '\')">
+                View more info
                 </button>';
             }
             echo '</td>';

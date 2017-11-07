@@ -16,7 +16,7 @@
     function EchoLoggedInPanel() {
         echo "<div class=\"well\">
             <p>Logged in as " . $_SESSION['realName'] . " (" . $_SESSION['username'] . ")</p>
-            <p><button class=\"btn btn-info\" onclick=\"logout();\" type=\"button\">Logout</button></p>
+            <p><button class=\"btn btn-warning\" onclick=\"logout();\" type=\"button\">Logout</button></p>
             <p><button class=\"btn btn-default\" onclick=\"$('#newEntryFields').toggle();\" type=\"button\">Create new entry</button></p>
             <div id=\"newEntryFields\" style=\"display: none\">
                 <p>Other school's course code: <input type=\"text\" name=\"otherCourseCode\" id=\"otherCourseCode\" class=\"form-control\" placeholder=\"Course code\"></p>
@@ -34,6 +34,8 @@
                         <li><a onclick=\"$('#isApprovedDropdown').html('No<span class=\'caret\'></span>');$('#isApproved').val(0).change();\">No</a></li>
                     </ul>
                 </div>
+                <p>Notes: </p>
+                <textarea class=\"form-control\" id=\"notes\" maxlength=\"500\"></textarea>
                 <button class=\"btn btn-primary disabled\" id=\"submitButton\" onclick=\"addNewEquivalency();\">Submit</button>
             </div>
         </div>
@@ -72,7 +74,8 @@
             xhttp.open(\"GET\", \"AddNewEquivalency.php?otherSchoolName=\" + $('#otherSchoolName').val()
                     + \"&otherCourseCode=\" + $('#otherCourseCode').val()
                     + \"&localCourseCode=\" + $('#localCourseCode').val()
-                    + \"&isApproved=\" + $('#isApproved').val());
+                    + \"&isApproved=\" + $('#isApproved').val()
+                    + \"&notes=\" + $('#notes').val());
             xhttp.send();
         }
 
@@ -125,7 +128,6 @@
     }
 
     function EscapeStringForFunctionCall($string) {
-        // return str_replace('"', '\"', str_replace("'", "\'", str_replace('\\', '\\\\', $string)));
         return str_replace("'", "\'", str_replace("\\", "\\\\", htmlentities($string)));
     }
 
@@ -177,16 +179,26 @@
         echo '<table class="table table-striped table-responsive"><thead><tr>';
 
         # Iterate through and print the names of each field, as the table headers.
-        $results->data_seek(0);
-        foreach($results->fetch_assoc() as $key => $value) {
-            # Split the name of the column by either underscores or camelCasing.
-            $pattern = "/(?<=[a-z])(?=[A-Z])|_/";
-            $words = MatchByUnderscoresOrCamelCase($pattern, $key);
-            echo '<th>';
-            foreach ($words as $word) {
-                echo ucwords($word) . ' ';
-            }
-            echo "</th>\n";
+        // $results->data_seek(0);
+        // foreach($results->fetch_assoc() as $key => $value) {
+        //     # Split the name of the column by either underscores or camelCasing.
+        //     $pattern = "/(?<=[a-z])(?=[A-Z])|_/";
+        //     $words = MatchByUnderscoresOrCamelCase($pattern, $key);
+        //     echo '<th>';
+        //     foreach ($words as $word) {
+        //         echo ucwords($word) . ' ';
+        //     }
+        //     echo "</th>\n";
+        // }
+        echo '<th>Other Course Code</th>
+        <th>Other School</th>
+        <th>SCU\'s Course Code</th>
+        <th>Approved?</th>
+        <th>Approver</th>';
+        if ($detailed == false) {
+            echo '<th>Detailed view</th>';
+        } else {
+            echo '<th>Notes</th>';
         }
         if (isset($_SESSION['loggedIn'])
                 && $_SESSION['loggedIn'] == true
@@ -194,8 +206,6 @@
                 && isset($row['ApprovedBy'])
                 && $_SESSION['realName'] == $row['ApprovedBy']) {
             echo '<th>Delete this entry</th>';
-        } else if ($detailed == false) {
-            echo '<th>Detailed view</th>';
         }
         echo '</tr></thead><tbody id="results">';
 
@@ -203,35 +213,21 @@
         $results->data_seek(0);
         while($row = $results->fetch_assoc()) {
             echo '<tr>';
-            foreach($row as $value) {
-                if ($value === '0') {
-                    $value = 'No';
-                } else if ($value === '1') {
-                    $value = 'Yes';
-                }
-                echo '<td>' . htmlspecialchars($value) . '</td>' . "\n";
-            }
-            echo '<td>';
-            if (isset($_SESSION['loggedIn'])
-                    && $_SESSION['loggedIn'] == true
-                    && $canDelete == true
-                    && isset($row['ApprovedBy'])
-                    && $_SESSION['realName'] == $row['ApprovedBy']) {
-                echo '<button class="btn btn-danger" type="button" onclick="deleteEquivalency(\'';
-                echo EscapeStringForFunctionCall($row['OtherCourseCode']);
-                echo '\', \'';
-                echo EscapeStringForFunctionCall($row['OtherSchool']);
-                echo '\', \'';
-                echo EscapeStringForFunctionCall($row['LocalCourseCode']);
-                echo '\', ';
-                echo EscapeStringForFunctionCall($row['IsApproved']);
-                echo ', \'';
-                echo EscapeStringForFunctionCall($row['ApprovedBy']);
-                echo '\')">
-                Delete
-                </button>';
-            } else if ($detailed == false) {
-                echo '<button class="btn btn-info" type="button" onclick="viewEquivalency(\'';
+            // foreach($row as $value) {
+            //     if ($value === '0') {
+            //         $value = 'No';
+            //     } else if ($value === '1') {
+            //         $value = 'Yes';
+            //     }
+            //     echo '<td>' . htmlspecialchars($value) . '</td>' . "\n";
+            // }
+            echo '<td>' . htmlspecialchars($row['OtherCourseCode']) . '</td>
+            <td>' . htmlspecialchars($row['OtherSchool']) . '</td>
+            <td>' . htmlspecialchars($row['LocalCourseCode']) . '</td>
+            <td>' . ($row['IsApproved'] == 1 ? 'Yes' : 'No') . '</td>
+            <td>' . htmlspecialchars($row['ApprovedBy']) . '</td>';
+            if ($detailed == false) {
+                echo '<td><button class="btn btn-info" type="button" onclick="viewEquivalency(\'';
                 echo EscapeStringForFunctionCall($row['OtherCourseCode']);
                 echo '\', \'';
                 echo EscapeStringForFunctionCall($row['OtherSchool']);
@@ -243,9 +239,29 @@
                 echo EscapeStringForFunctionCall($row['ApprovedBy']);
                 echo '\')">
                 View more info
-                </button>';
+                </button></td>';
+            } else {
+                echo '<td>' . htmlspecialchars($row['Notes']) . '</td>';
             }
-            echo '</td>';
+            if (isset($_SESSION['loggedIn'])
+                    && $_SESSION['loggedIn'] == true
+                    && $canDelete == true
+                    && isset($row['ApprovedBy'])
+                    && $_SESSION['realName'] == $row['ApprovedBy']) {
+                echo '<td><button class="btn btn-danger" type="button" onclick="deleteEquivalency(\'';
+                echo EscapeStringForFunctionCall($row['OtherCourseCode']);
+                echo '\', \'';
+                echo EscapeStringForFunctionCall($row['OtherSchool']);
+                echo '\', \'';
+                echo EscapeStringForFunctionCall($row['LocalCourseCode']);
+                echo '\', ';
+                echo EscapeStringForFunctionCall($row['IsApproved']);
+                echo ', \'';
+                echo EscapeStringForFunctionCall($row['ApprovedBy']);
+                echo '\')">
+                Delete
+                </button></td>';
+            }
             echo '</tr>';
         }
 

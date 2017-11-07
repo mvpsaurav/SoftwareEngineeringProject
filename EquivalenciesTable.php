@@ -26,11 +26,17 @@
         } else {
             $localCourseCode = "";
         }
+        if (isset($_GET['approvedBy'])) {
+            $approvedBy = $conn->real_escape_string($_GET['approvedBy']);
+        } else {
+            $approvedBy = "";
+        }
 
         $query = "SELECT * FROM COEN174CourseEquivalencies "
                 . "WHERE otherSchool LIKE '%" . $otherSchoolName . "%' "
                 . "AND otherCourseCode LIKE '%" . $otherCourseCode . "%' "
-                . "AND localCourseCode LIKE '%" . $localCourseCode . "%'";
+                . "AND localCourseCode LIKE '%" . $localCourseCode . "%' "
+                . "AND approvedBy LIKE '%" . $approvedBy . "%'";
 
         $result = $conn->query($query);
         DisplayResults($result);

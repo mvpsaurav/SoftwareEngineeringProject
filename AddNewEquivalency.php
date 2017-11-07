@@ -8,6 +8,7 @@
             && isset($_GET['otherSchoolName'])
             && isset($_GET['localCourseCode'])
             && isset($_GET['isApproved'])
+            && isset($_GET['notes'])
             && isset($_SESSION['loggedIn'])
             && $_SESSION['loggedIn'] == true) {
         // Initalize the DB connection.
@@ -22,16 +23,18 @@
         $otherSchoolName = $conn->real_escape_string($_GET['otherSchoolName']);
         $localCourseCode = $conn->real_escape_string($_GET['localCourseCode']);
         $isApproved = $conn->real_escape_string($_GET['isApproved']);
+        $notes = $conn->real_escape_string($_GET['notes']);
 
         // Insert the new equivalency.
         $sql = "INSERT INTO COEN174CourseEquivalencies
-                (otherCourseCode, otherSchool, localCourseCode, isApproved, approvedBy)
+                (otherCourseCode, otherSchool, localCourseCode, isApproved, approvedBy, notes)
                 VALUES('"
                 . $otherCourseCode . "', '"
                 . $otherSchoolName . "', '"
                 . $localCourseCode . "', "
                 . $isApproved . ", '"
-                . $_SESSION['realName'] . "')";
+                . $_SESSION['realName'] . "', '"
+                . $notes . "')";
         if ($conn->query($sql) == false) {
             EchoDismissableAlert("There was a problem adding the entry.  Make sure you entered your
             values correctly and try again.");

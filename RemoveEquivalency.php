@@ -4,10 +4,10 @@
     session_start();
 
     // If the submit button was clicked, add a new entry to the table.
-    if(isset($_POST['otherCourseCode'])
-            && isset($_POST['otherSchoolName'])
-            && isset($_POST['localCourseCode'])
-            && isset($_POST['isApproved'])
+    if(isset($_GET['otherCourseCode'])
+            && isset($_GET['otherSchoolName'])
+            && isset($_GET['localCourseCode'])
+            && isset($_GET['isApproved'])
             && isset($_SESSION['loggedIn'])
             && $_SESSION['loggedIn'] == true) {
         // Initalize the DB connection.
@@ -18,10 +18,10 @@
         $conn = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
 
         // Validate variables.
-        $otherCourseCode = $conn->real_escape_string($_POST['otherCourseCode']);
-        $otherSchoolName = $conn->real_escape_string($_POST['otherSchoolName']);
-        $localCourseCode = $conn->real_escape_string($_POST['localCourseCode']);
-        $isApproved = $conn->real_escape_string($_POST['isApproved']);
+        $otherCourseCode = $conn->real_escape_string($_GET['otherCourseCode']);
+        $otherSchoolName = $conn->real_escape_string($_GET['otherSchoolName']);
+        $localCourseCode = $conn->real_escape_string($_GET['localCourseCode']);
+        $isApproved = $conn->real_escape_string($_GET['isApproved']);
 
         // Get approver name from the users table.
         $sql = "DELETE FROM COEN174CourseEquivalencies "
@@ -31,7 +31,6 @@
             . "AND isApproved = $isApproved "
             . "AND approvedBy = '" . $_SESSION['realName'] . "'";
         echo $sql;
-        // fwrite($handle, $sql);
         if ($conn->query($sql) == false) {
             EchoDismissableAlert("There was a problem removing the entry.  Make sure you entered your
             values correctly and try again.");
@@ -42,7 +41,12 @@
 
         $conn->close();
     } else {
-        http_response_code(500);
+        http_response_code(501);
+        echo 'other course code set: ' . (string) isset($_GET['otherCourseCode']) . "\n";
+        echo 'other school name set: ' . isset($_GET['otherSchoolName']) . "\n";
+        echo 'local course code set: ' . isset($_GET['localCourseCode']) . "\n";
+        echo 'is approved set: ' . isset($_GET['isApproved']) . "\n";
+        echo 'is logged in set: ' . isset($_SESSION['loggedIn']) . "\n";
     }
 ?>
 
@@ -76,7 +80,7 @@
     <body>
         <div class="container-fluid">
             <div class="row">
-                <form action="RemoveEquivalency.php" method="POST">
+                <form action="RemoveEquivalency.php" method="GET">
                     <div class="form-group">
                         <input type="text" class="form-control" name="otherCourseCode" placeholder="Other Course Code">
                     </div>

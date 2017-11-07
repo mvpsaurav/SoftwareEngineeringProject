@@ -35,6 +35,7 @@
                             <p>Other school's name: <input type="text" id="otherSchoolNameSearch" class="form-control" placeholder="School name"></p>
                             <p>Other school's course code: <input type="text" id="otherCourseCodeSearch" class="form-control" placeholder="Course code"></p>
                             <p>SCU's course code: <input type="text" id="localCourseCodeSearch" class="form-control" placeholder="Course code"></p>
+                            <p>Approver: <input type="text" id="approvedBySearch" class="form-control" placeholder="Approver"></p>
                         </div>
 <?php
     include 'HelperFunctions.php';
@@ -78,7 +79,8 @@
         };
         xhttp.open("GET", "EquivalenciesTable.php?otherCourseCode=" + $('#otherCourseCodeSearch').val()
                 + "&otherSchoolName=" + $('#otherSchoolNameSearch').val()
-                + "&localCourseCode=" + $('#localCourseCodeSearch').val());
+                + "&localCourseCode=" + $('#localCourseCodeSearch').val()
+                + "&approvedBy=" + $('#approvedBySearch').val());
         xhttp.send();
     }
 
@@ -86,6 +88,7 @@
     $('#otherSchoolNameSearch').keyup(updateRows);
     $('#otherCourseCodeSearch').keyup(updateRows);
     $('#localCourseCodeSearch').keyup(updateRows);
+    $('#approvedBySearch').keyup(updateRows);
 
     // Helper function that updates whether the submit button may be clicked every
     // time a user changes one of the inputs in the "create new entry" portion.

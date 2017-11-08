@@ -90,6 +90,7 @@
                         <input type="text" class="form-control" name="username" id="username" placeholder="Username">
                     </div>
                     <div class="form-group">
+                        <input type="hidden" class="form-control" name="hashedPassword" id="hashedPassword">
                         <input type="text" class="form-control" name="password" id="password" placeholder="Password">
                     </div>
                     <div class="form-group">
@@ -100,4 +101,13 @@
             </div>
         </div>
     </body>
+    <script>
+    hash = function(s){
+        return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
+    }
+
+    $('#password').change(function() {
+        $('#hashedPassword').val(hash($('#password').val())).change();
+    });
+    </script>
 </html>

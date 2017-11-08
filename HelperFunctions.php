@@ -122,7 +122,7 @@
             xhttp.open(\"POST\", \"AttemptFacultyLogin.php\");
             xhttp.setRequestHeader(\"Content-type\", \"application/x-www-form-urlencoded\");
             xhttp.send(\"username=\" + $('#username').val()
-                      + \"&password=\" + $('#password').val());
+                      + \"&password=\" + hash($('#password').val()));
         }
         </script>";
     }

@@ -32,8 +32,8 @@
                     <div class="form-group">
                         <div class="well">
                             <h1>Filter by:</h1>
-                            <p>Other school's name: <input type="text" id="otherSchoolNameSearch" class="form-control" placeholder="School name"></p>
-                            <p>Other school's course code: <input type="text" id="otherCourseCodeSearch" class="form-control" placeholder="Course code"></p>
+                            <p>Outside school's name: <input type="text" id="otherSchoolNameSearch" class="form-control" placeholder="School name"></p>
+                            <p>Outside school's course code: <input type="text" id="otherCourseCodeSearch" class="form-control" placeholder="Course code"></p>
                             <p>SCU's course code: <input type="text" id="localCourseCodeSearch" class="form-control" placeholder="Course code"></p>
                             <p>Approver: <input type="text" id="approvedBySearch" class="form-control" placeholder="Approver"></p>
                         </div>

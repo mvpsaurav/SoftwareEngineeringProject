@@ -48,7 +48,8 @@
 						<p>Username: <input type=\"text\" class=\"form-control\" name=\"username\" id=\"username\" placeholder=\"Username\"></p>
                     </div>
                     <div class=\"form-group\">
-                        <p>Password: <input type=\"password\" class=\"form-control\" name=\"password\" id=\"password\" placeholder=\"Password\"></p>
+                        <input type=\"hidden\" name=\"password\" id=\"password\">
+                        <p>Password: <input type=\"password\" class=\"form-control\" name=\"unhashedPassword\" id=\"unhashedPassword\" placeholder=\"Password\"></p>
                     </div>
                     <div class=\"form-group\">
                         <p>Real name: <input type=\"text\" class=\"form-control\" name=\"realName\" id=\"realName\" placeholder=\"Real Name\"></p>
@@ -58,6 +59,10 @@
 	</div>
 		</div>
         <script>
+        $('#unhashedPassword').change(function() {
+            $('#password').val(hash($('#unhashedPassword').val()));
+        });
+
         /**
         * Inserts a new row into the equivalencies table.
         */

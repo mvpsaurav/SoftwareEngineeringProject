@@ -72,8 +72,8 @@
         addNewEquivalency = function() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
+                document.getElementById(\"alertSection\").innerHTML = this.responseText;
                 if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-                    document.getElementById(\"alertSection\").innerHTML = this.responseText;
                     if (xhttp.getResponseHeader(\"Success\") == \"true\") {
                         window.location.reload();
                     }

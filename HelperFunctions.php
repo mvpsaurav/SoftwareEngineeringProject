@@ -199,7 +199,7 @@
         //     echo "</th>\n";
         // }
         echo '<th>Other Course Code</th>
-        <th>Other School</th>
+        <th>Outside School</th>
         <th>SCU\'s Course Code</th>
         <th>Approved?</th>
         <th>Approver</th>';

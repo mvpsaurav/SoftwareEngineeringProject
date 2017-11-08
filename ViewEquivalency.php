@@ -71,34 +71,37 @@
             && $_SESSION['loggedIn'] == true) {
         $result = $conn->query($sql);
         $row = $result->fetch_assoc();
-        echo '
-        <div class="well">
-            <p>Other school\'s course code: <input type="text" name="otherCourseCode" id="otherCourseCode" class="form-control" value="' . $row['OtherCourseCode'] . '"></p>
-            <p>Other school\'s name: <input type="text" name="otherSchoolName" id="otherSchoolName" class="form-control" value="' . $row['OtherSchool'] . '"></p>
-            <p>SCU\'s course code: <input type="text" name="localCourseCode" id="localCourseCode" class="form-control" value="' . $row['LocalCourseCode'] . '"></p>
-            <p>Approved?</p>
-            <input id="isApproved" name="isApproved" type="hidden" value="' . $row['IsApproved'] . '">
-            <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" id="isApprovedDropdown" data-toggle="dropdown">
-                    Select a value
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a onclick="$(\'#isApprovedDropdown\').html(\'Yes<span class=\\\'caret\\\'></span>\');$(\'#isApproved\').val(1).change();">Yes</a></li>
-                    <li><a onclick="$(\'#isApprovedDropdown\').html(\'No<span class=\\\'caret\\\'></span>\');$(\'#isApproved\').val(0).change();">No</a></li>
-                </ul>
+        if ($_SESSION['realName'] == $row['ApprovedBy']) {
+            echo '
+            <div class="well">
+                <h2>Modify this equivalency:</h2>
+                <p>Other school\'s course code: <input type="text" name="otherCourseCode" id="otherCourseCode" class="form-control" value="' . $row['OtherCourseCode'] . '"></p>
+                <p>Other school\'s name: <input type="text" name="otherSchoolName" id="otherSchoolName" class="form-control" value="' . $row['OtherSchool'] . '"></p>
+                <p>SCU\'s course code: <input type="text" name="localCourseCode" id="localCourseCode" class="form-control" value="' . $row['LocalCourseCode'] . '"></p>
+                <p>Approved?</p>
+                <input id="isApproved" name="isApproved" type="hidden" value="' . $row['IsApproved'] . '">
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" id="isApprovedDropdown" data-toggle="dropdown">
+                        Select a value
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a onclick="$(\'#isApprovedDropdown\').html(\'Yes<span class=\\\'caret\\\'></span>\');$(\'#isApproved\').val(1).change();">Yes</a></li>
+                        <li><a onclick="$(\'#isApprovedDropdown\').html(\'No<span class=\\\'caret\\\'></span>\');$(\'#isApproved\').val(0).change();">No</a></li>
+                    </ul>
+                </div>
+                <p>Notes: </p>
+                <textarea class="form-control" id="notes" maxlength="500" value="' . $row['Notes'] . '"></textarea>
+                <button class="btn btn-primary" id="submitButton" onclick="updateEquivalency(\''
+                . EscapeStringForFunctionCall($row['OtherCourseCode']) . '\', \''
+                . EscapeStringForFunctionCall($row['OtherSchool']) . '\', \''
+                . EscapeStringForFunctionCall($row['LocalCourseCode']) . '\', '
+                . $row['IsApproved']
+                . ');">Submit</button>
             </div>
-            <p>Notes: </p>
-            <textarea class="form-control" id="notes" maxlength="500" value="' . $row['Notes'] . '"></textarea>
-            <button class="btn btn-primary" id="submitButton" onclick="updateEquivalency(\''
-            . EscapeStringForFunctionCall($row['OtherCourseCode']) . '\', \''
-            . EscapeStringForFunctionCall($row['OtherSchool']) . '\', \''
-            . EscapeStringForFunctionCall($row['LocalCourseCode']) . '\', '
-            . $row['IsApproved']
-            . ');">Submit</button>
-        </div>
-        <div id="alertSection"></div>
-        ';
+            <div id="alertSection"></div>
+            ';
+        }
     }
 ?>
                 </div>
@@ -147,7 +150,13 @@
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-                $('#alertSection').innerHTML = this.responseText;
+                $('#alertSection').html(this.responseText);
+                window.location = "ViewEquivalency.php?"
+                    + "otherCourseCode=" + otherCourseCode
+                    + "&otherSchoolName=" + otherSchool
+                    + "&localCourseCode=" + localCourseCode
+                    + "&isApproved=" + isApproved
+                    + "&approvedBy=<?php echo $_SESSION['realName']?>";
             }
         }
         xhttp.open("POST", "ModifyEquivalency.php");

@@ -19,8 +19,8 @@
             <p><button class=\"btn btn-warning\" onclick=\"logout();\" type=\"button\">Logout</button></p>
             <p><button class=\"btn btn-default\" onclick=\"$('#newEntryFields').toggle();\" type=\"button\">Create new entry</button></p>
             <div id=\"newEntryFields\" style=\"display: none\">
-                <p>Other school's course code: <input type=\"text\" name=\"otherCourseCode\" id=\"otherCourseCode\" class=\"form-control\" placeholder=\"Course code\"></p>
-                <p>Other school's name: <input type=\"text\" name=\"otherSchoolName\" id=\"otherSchoolName\" class=\"form-control\" placeholder=\"School name\"></p>
+                <p>Outside school's course code: <input type=\"text\" name=\"otherCourseCode\" id=\"otherCourseCode\" class=\"form-control\" placeholder=\"Course code\"></p>
+                <p>Outside school's name: <input type=\"text\" name=\"otherSchoolName\" id=\"otherSchoolName\" class=\"form-control\" placeholder=\"School name\"></p>
                 <p>SCU's course code: <input type=\"text\" name=\"localCourseCode\" id=\"localCourseCode\" class=\"form-control\" placeholder=\"Course code\"></p>
                 <p>Approved?</p>
                 <input id=\"isApproved\" name=\"isApproved\" type=\"hidden\">

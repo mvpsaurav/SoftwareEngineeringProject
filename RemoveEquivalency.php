@@ -22,6 +22,11 @@
         $otherSchoolName = $conn->real_escape_string($_GET['otherSchoolName']);
         $localCourseCode = $conn->real_escape_string($_GET['localCourseCode']);
         $isApproved = $conn->real_escape_string($_GET['isApproved']);
+        if ($_SESSION['username'] == "admin") {
+            $approvedBy = $conn->real_escape_string($_GET['approvedBy']);
+        } else {
+            $approvedBy = $_SESSION['realName'];
+        }
 
         // Get approver name from the users table.
         $sql = "DELETE FROM COEN174CourseEquivalencies "
@@ -29,7 +34,7 @@
             . "AND OtherSchool = '$otherSchoolName' "
             . "AND localCourseCode = '$localCourseCode' "
             . "AND isApproved = $isApproved "
-            . "AND approvedBy = '" . $_SESSION['realName'] . "'";
+            . "AND approvedBy = '$approvedBy'";
         echo $sql;
         if ($conn->query($sql) == false) {
             EchoDismissableAlert("There was a problem removing the equivalency.  Make sure you entered your

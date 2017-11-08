@@ -212,7 +212,8 @@
                 && $_SESSION['loggedIn'] == true
                 && $canDelete == true
                 && isset($row['ApprovedBy'])
-                && $_SESSION['realName'] == $row['ApprovedBy']) {
+                && ($_SESSION['realName'] == $row['ApprovedBy']
+                || $_SESSION['username'] == "admin")) {
             echo '<th>Delete this entry</th>';
         }
         echo '</tr></thead><tbody id="results">';
@@ -255,7 +256,8 @@
                     && $_SESSION['loggedIn'] == true
                     && $canDelete == true
                     && isset($row['ApprovedBy'])
-                    && $_SESSION['realName'] == $row['ApprovedBy']) {
+                    && ($_SESSION['realName'] == $row['ApprovedBy']
+                    || $_SESSION['username'] == "admin")) {
                 echo '<td><button class="btn btn-danger" type="button" onclick="deleteEquivalency(\'';
                 echo EscapeStringForFunctionCall($row['OtherCourseCode']);
                 echo '\', \'';

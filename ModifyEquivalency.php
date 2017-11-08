@@ -12,6 +12,7 @@
             && isset($_POST['originalLocalCourseCode'])
             && isset($_POST['isApproved'])
             && isset($_POST['originalIsApproved'])
+            && isset($_POST['originalApprovedBy'])
             && isset($_POST['notes'])
             && isset($_SESSION['loggedIn'])
             && $_SESSION['loggedIn'] == true) {
@@ -33,18 +34,24 @@
         $originalIsApproved = $conn->real_escape_string($_POST['originalIsApproved']);
         $notes = $conn->real_escape_string($_POST['notes']);
         $approvedBy = $_SESSION['realName'];
+        if ($_SESSION['username'] == "admin") {
+            $originalApprovedBy = $conn->real_escape_string($_POST['originalApprovedBy']);
+        } else {
+            $originalApprovedBy = $_SESSION['realName'];
+        }
 
         // Get approver name from the users table.
         $sql = "UPDATE COEN174CourseEquivalencies "
             . "SET OtherCourseCode = '$otherCourseCode', "
             . "OtherSchool = '$otherSchoolName', "
             . "LocalCourseCode = '$localCourseCode', "
+            . "ApprovedBy = '$approvedBy', "
             . "IsApproved = $isApproved, "
             . "Notes = '$notes' "
             . "WHERE OtherCourseCode = '$originalOtherCourseCode' "
             . "AND OtherSchool = '$originalOtherSchool' "
             . "AND LocalCourseCode = '$originalLocalCourseCode' "
-            . "AND ApprovedBy = '$approvedBy' "
+            . "AND ApprovedBy = '$originalApprovedBy' "
             . "AND IsApproved = $originalIsApproved";
         if ($conn->query($sql) == false) {
             EchoDismissableAlert("Failed to modify the equivalency.");

@@ -71,7 +71,8 @@
             && $_SESSION['loggedIn'] == true) {
         $result = $conn->query($sql);
         $row = $result->fetch_assoc();
-        if ($_SESSION['realName'] == $row['ApprovedBy']) {
+        if ($_SESSION['realName'] == $row['ApprovedBy']
+                || $_SESSION['username'] == "admin") {
             echo '
             <div class="well">
                 <h2>Modify this equivalency:</h2>
@@ -96,8 +97,9 @@
                 . EscapeStringForFunctionCall($row['OtherCourseCode']) . '\', \''
                 . EscapeStringForFunctionCall($row['OtherSchool']) . '\', \''
                 . EscapeStringForFunctionCall($row['LocalCourseCode']) . '\', '
-                . $row['IsApproved']
-                . ');">Submit</button>
+                . $row['IsApproved'] . ', \''
+                . EscapeStringForFunctionCall($row['ApprovedBy'])
+                . '\');">Submit</button>
             </div>
             <div id="alertSection"></div>
             ';
@@ -141,7 +143,8 @@
     updateEquivalency = function(originalOtherCourseCode,
             originalOtherSchool,
             originalLocalCourseCode,
-            originalIsApproved) {
+            originalIsApproved,
+            originalApprovedBy) {
         otherCourseCode = $('#otherCourseCode').val();
         otherSchool = $('#otherSchoolName').val();
         localCourseCode = $('#localCourseCode').val();
@@ -169,6 +172,7 @@
             + "&originalLocalCourseCode=" + originalLocalCourseCode
             + "&isApproved=" + isApproved
             + "&originalIsApproved=" + originalIsApproved
+            + "&originalApprovedBy=" + originalApprovedBy
             + "&notes=" + notes);
     }
 

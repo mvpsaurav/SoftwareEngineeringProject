@@ -42,11 +42,7 @@
         $conn->close();
     } else {
         http_response_code(501);
-        echo 'other course code set: ' . (string) isset($_GET['otherCourseCode']) . "\n";
-        echo 'other school name set: ' . isset($_GET['otherSchoolName']) . "\n";
-        echo 'local course code set: ' . isset($_GET['localCourseCode']) . "\n";
-        echo 'is approved set: ' . isset($_GET['isApproved']) . "\n";
-        echo 'is logged in set: ' . isset($_SESSION['loggedIn']) . "\n";
+        // TODO: remove this
     }
 ?>
 

@@ -54,7 +54,7 @@
         . "WHERE OtherCourseCode = '$otherCourseCode' "
         . "AND OtherSchool = '$otherSchoolName' "
         . "AND LocalCourseCode = '$localCourseCode' "
-        . "AND IsApproved = '$isApproved' "
+        . "AND IsApproved = $isApproved "
         . "AND ApprovedBy = '$approvedBy'";
 
     $result = $conn->query($sql);
@@ -66,9 +66,41 @@
     }
 ?>
                     </div>
-                    <div class="well">
-
-                    </div>
+<?php
+    if (isset($_SESSION['loggedIn'])
+            && $_SESSION['loggedIn'] == true) {
+        $result = $conn->query($sql);
+        $row = $result->fetch_assoc();
+        echo '
+        <div class="well">
+            <p>Other school\'s course code: <input type="text" name="otherCourseCode" id="otherCourseCode" class="form-control" value="' . $row['OtherCourseCode'] . '"></p>
+            <p>Other school\'s name: <input type="text" name="otherSchoolName" id="otherSchoolName" class="form-control" value="' . $row['OtherSchool'] . '"></p>
+            <p>SCU\'s course code: <input type="text" name="localCourseCode" id="localCourseCode" class="form-control" value="' . $row['LocalCourseCode'] . '"></p>
+            <p>Approved?</p>
+            <input id="isApproved" name="isApproved" type="hidden" value="' . $row['IsApproved'] . '">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" id="isApprovedDropdown" data-toggle="dropdown">
+                    Select a value
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a onclick="$(\'#isApprovedDropdown\').html(\'Yes<span class=\\\'caret\\\'></span>\');$(\'#isApproved\').val(1).change();">Yes</a></li>
+                    <li><a onclick="$(\'#isApprovedDropdown\').html(\'No<span class=\\\'caret\\\'></span>\');$(\'#isApproved\').val(0).change();">No</a></li>
+                </ul>
+            </div>
+            <p>Notes: </p>
+            <textarea class="form-control" id="notes" maxlength="500" value="' . $row['Notes'] . '"></textarea>
+            <button class="btn btn-primary" id="submitButton" onclick="updateEquivalency(\''
+            . EscapeStringForFunctionCall($row['OtherCourseCode']) . '\', \''
+            . EscapeStringForFunctionCall($row['OtherSchool']) . '\', \''
+            . EscapeStringForFunctionCall($row['LocalCourseCode']) . '\', '
+            . $row['IsApproved']
+            . ');">Submit</button>
+        </div>
+        <div id="alertSection"></div>
+        ';
+    }
+?>
                 </div>
             </div>
         </div>
@@ -79,25 +111,56 @@
     /**
     * Deletes an equivalency.
     */
-    deleteEquivalency = function(occ, os, lcc, ia, ab) {
+    deleteEquivalency = function(otherCourseCode,
+            otherSchool,
+            localCourseCode,
+            isApproved,
+            approvedBy) {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
                 window.location = "SoftwareEngineeringProject.php";
             }
         }
-        xhttp.open("GET", "RemoveEquivalency.php?otherCourseCode=" + occ
-            + "&otherSchoolName=" + os
-            + "&localCourseCode=" + lcc
-            + "&isApproved=" + ia
-            + "&approvedBy=" + ab);
+        xhttp.open("GET", "RemoveEquivalency.php?otherCourseCode=" + otherCourseCode
+            + "&otherSchoolName=" + otherSchool
+            + "&localCourseCode=" + localCourseCode
+            + "&isApproved=" + isApproved
+            + "&approvedBy=" + approvedBy);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send();
-        console.log("otherCourseCode=" + occ
-            + "&otherSchoolName=" + os
-            + "&localCourseCode=" + lcc
-            + "&isApproved=" + ia
-            + "&approvedBy=" + ab);
+    }
+
+
+    /**
+    * Update an equivalency.
+    */
+    updateEquivalency = function(originalOtherCourseCode,
+            originalOtherSchool,
+            originalLocalCourseCode,
+            originalIsApproved) {
+        otherCourseCode = $('#otherCourseCode').val();
+        otherSchool = $('#otherSchoolName').val();
+        localCourseCode = $('#localCourseCode').val();
+        isApproved = $('#isApproved').val();
+        notes = $('#notes').val();
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                $('#alertSection').innerHTML = this.responseText;
+            }
+        }
+        xhttp.open("POST", "ModifyEquivalency.php");
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("otherCourseCode=" + otherCourseCode
+            + "&originalOtherCourseCode=" + originalOtherCourseCode
+            + "&otherSchoolName=" + otherSchool
+            + "&originalOtherSchool=" + originalOtherSchool
+            + "&localCourseCode=" + localCourseCode
+            + "&originalLocalCourseCode=" + originalLocalCourseCode
+            + "&isApproved=" + isApproved
+            + "&originalIsApproved=" + originalIsApproved
+            + "&notes=" + notes);
     }
 
     </script>

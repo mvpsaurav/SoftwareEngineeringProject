@@ -47,8 +47,7 @@
             . "AND ApprovedBy = '$approvedBy' "
             . "AND IsApproved = $originalIsApproved";
         if ($conn->query($sql) == false) {
-            EchoDismissableAlert("There was a problem modifying the entry.  Make sure you entered your
-            values correctly and try again.");
+            EchoDismissableAlert("Failed to modify the equivalency.");
             http_response_code(500);
         } else {
             EchoDismissableSuccess("Equivalency successfully modified.");
@@ -56,11 +55,7 @@
 
         $conn->close();
     } else {
-        http_response_code(501);
-        echo 'other course code set: ' . (string) isset($_POST['otherCourseCode']) . "\n";
-        echo 'other school name set: ' . isset($_POST['otherSchoolName']) . "\n";
-        echo 'local course code set: ' . isset($_POST['localCourseCode']) . "\n";
-        echo 'is approved set: ' . isset($_POST['isApproved']) . "\n";
-        echo 'is logged in set: ' . isset($_SESSION['loggedIn']) . "\n";
+        http_response_code(500);
+        EchoDismissableAlert("Failed to modify the equivalency.");
     }
 ?>

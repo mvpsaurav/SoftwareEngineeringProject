@@ -36,13 +36,18 @@
                 . $_SESSION['realName'] . "', '"
                 . $notes . "')";
         if ($conn->query($sql) == false) {
-            EchoDismissableAlert("There was a problem adding the entry.  Make sure you entered your
+            EchoDismissableAlert("There was a problem adding the equivalency.  Make sure you entered your
             values correctly and try again.");
+            http_response_code(500);
         } else {
             EchoDismissableSuccess("Equivalency successfully added.");
             header("Success: true");
         }
 
         $conn->close();
+    } else {
+        EchoDismissableAlert("There was a problem adding the equivalency.  Make sure you entered your
+        values correctly and try again.");
+        http_response_code(500);
     }
 ?>

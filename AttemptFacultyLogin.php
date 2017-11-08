@@ -36,5 +36,7 @@
         }
 
         $conn->close();
+    } else {
+        EchoDismissableAlert("Failed to log in.");
     }
 ?>

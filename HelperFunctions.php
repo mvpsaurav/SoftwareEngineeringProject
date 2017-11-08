@@ -39,26 +39,29 @@
                 <button class=\"btn btn-primary disabled\" id=\"submitButton\" onclick=\"addNewEquivalency();\">Submit</button>
             </div>
         </div>
-        <div id=\"alertSection\"></div>
-		<div class=\"well\">
-            <p><button class=\"btn btn-default\" onclick=\"$('#addFacultyUserSection').toggle();\" type=\"button\">Create new faculty user</button></p>
-	<div id=\"addFacultyUserSection\" style=\"display: none\">
-		<form action=\"AddFacultyUser.php\" method=\"POST\">
-                    <div class=\"form-group\">
-						<p>Username: <input type=\"text\" class=\"form-control\" name=\"username\" id=\"username\" placeholder=\"Username\"></p>
-                    </div>
-                    <div class=\"form-group\">
-                        <input type=\"hidden\" name=\"password\" id=\"password\">
-                        <p>Password: <input type=\"password\" class=\"form-control\" name=\"unhashedPassword\" id=\"unhashedPassword\" placeholder=\"Password\"></p>
-                    </div>
-                    <div class=\"form-group\">
-                        <p>Real name: <input type=\"text\" class=\"form-control\" name=\"realName\" id=\"realName\" placeholder=\"Real Name\"></p>
-                    </div>
-                    <button type=\"submit\" class=\"btn btn-primary\">Submit</button>
-                </form>
-	</div>
-		</div>
-        <script>
+        <div id=\"alertSection\"></div>";
+        if (isset($_SESSION['loggedIn'])
+                && $_SESSION['username'] == "admin") {
+            echo "<div class=\"well\">
+                <p><button class=\"btn btn-default\" onclick=\"$('#addFacultyUserSection').toggle();\" type=\"button\">Create new faculty user</button></p>
+    	<div id=\"addFacultyUserSection\" style=\"display: none\">
+    		<form action=\"AddFacultyUser.php\" method=\"POST\">
+                        <div class=\"form-group\">
+    						<p>Username: <input type=\"text\" class=\"form-control\" name=\"username\" id=\"username\" placeholder=\"Username\"></p>
+                        </div>
+                        <div class=\"form-group\">
+                            <input type=\"hidden\" name=\"password\" id=\"password\">
+                            <p>Password: <input type=\"password\" class=\"form-control\" name=\"unhashedPassword\" id=\"unhashedPassword\" placeholder=\"Password\"></p>
+                        </div>
+                        <div class=\"form-group\">
+                            <p>Real name: <input type=\"text\" class=\"form-control\" name=\"realName\" id=\"realName\" placeholder=\"Real Name\"></p>
+                        </div>
+                        <button type=\"submit\" class=\"btn btn-primary\">Submit</button>
+                    </form>
+    	</div>
+    		</div>";
+        }
+        echo "<script>
         $('#unhashedPassword').change(function() {
             $('#password').val(hash($('#unhashedPassword').val()));
         });

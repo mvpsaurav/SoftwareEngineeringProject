@@ -1,10 +1,15 @@
 <?php
+    include 'HelperFunctions.php';
+
     session_start();
+
     if(isset($_POST['username'])
             && isset($_POST['password'])
             && isset($_POST['realName'])
             && isset($_SESSION['loggedIn'])
-            && $_SESSION['loggedIn'] == true) {
+            && $_SESSION['loggedIn'] == true
+            && isset($_SESSION['username'])
+            && $_SESSION['username'] == "admin") {
         // Initalize the DB connection.
         $db_host = "dbserver.engr.scu.edu";
         $db_user = "cwalther";
@@ -30,7 +35,6 @@
         for ($i = 0; $i < 64; $i++) {
             $salt .= (string) rand(0, 9);
         }
-        echo "\$salt: $salt\n";
         $hashedAndSaltedPassword = hash("sha256", $password . $salt);
 
         // Log in the user, if possible.
@@ -41,17 +45,17 @@
                 . $hashedAndSaltedPassword . "', '"
                 . $salt . "', '"
                 . $realName . "')";
-        echo "\n" . $sql;
         $result = $conn->query($sql);
         if ($result != false) {
-            echo 'Success';
+            EchoDismissableSuccess("Successfully added user.");
         } else {
-            echo 'error';
-            echo $conn->error;
+            EchoDismissableAlert("Failed to add user.");
         }
 
         $conn->close();
         header("Location: SoftwareEngineeringProject.php");
+    } else {
+        EchoDismissableAlert("Failed to add user.");
     }
 ?>
 

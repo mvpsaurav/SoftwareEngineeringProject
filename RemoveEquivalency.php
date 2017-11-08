@@ -32,7 +32,7 @@
             . "AND approvedBy = '" . $_SESSION['realName'] . "'";
         echo $sql;
         if ($conn->query($sql) == false) {
-            EchoDismissableAlert("There was a problem removing the entry.  Make sure you entered your
+            EchoDismissableAlert("There was a problem removing the equivalency.  Make sure you entered your
             values correctly and try again.");
             http_response_code(500);
         } else {
@@ -41,8 +41,9 @@
 
         $conn->close();
     } else {
-        http_response_code(501);
-        // TODO: remove this
+        EchoDismissableAlert("There was a problem removing the equivalency.  Make sure you entered your
+        values correctly and try again.");
+        http_response_code(500);
     }
 ?>
 

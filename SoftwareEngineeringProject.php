@@ -31,7 +31,10 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <div class="well">
-                            <h1>Filter by:</h1>
+                            <h1>SCU Course Equivalency Lookup</h1>
+                        </div>
+                        <div class="well">
+                            <h2>Filter by:</h2>
                             <p>Outside school's name: <input type="text" id="otherSchoolNameSearch" class="form-control" placeholder="School name"></p>
                             <p>Outside school's course code: <input type="text" id="otherCourseCodeSearch" class="form-control" placeholder="Course code"></p>
                             <p>SCU's course code: <input type="text" id="localCourseCodeSearch" class="form-control" placeholder="Course code"></p>

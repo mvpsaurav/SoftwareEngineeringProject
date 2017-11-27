@@ -169,20 +169,20 @@
     function DisplayResults($results, $canDelete = false, $detailed = false) {
         # Check if the query failed.
         if(!$results) {
-            echo '<h1>Something went wrong with the query.</h1>';
+            echo '<h2>Something went wrong with the query.</h2>';
             return;
         }
 
         # Output the amount of results.
         if($results->fetch_assoc() == NULL or $results->num_rows == 0) {
-            echo '<h1 id="numResults">No results.</h1>';
+            echo '<h2 id="numResults">No results.</h2>';
             return;
         }
         elseif ($results->num_rows == 1) {
-            echo '<h1 id="numResults">1 result:</h1>';
+            echo '<h2 id="numResults">1 result:</h2>';
         }
         else {
-            echo '<h1 id="numResults">' . $results->num_rows . ' results:</h1>';
+            echo '<h2 id="numResults">' . $results->num_rows . ' results:</h2>';
         }
         echo '<table class="table table-striped table-responsive"><thead><tr>';
 

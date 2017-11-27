@@ -82,9 +82,13 @@
                 <p>Approved?</p>
                 <input id="isApproved" name="isApproved" type="hidden" value="' . $row['IsApproved'] . '">
                 <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" id="isApprovedDropdown" data-toggle="dropdown">
-                        Select a value
-                        <span class="caret"></span>
+                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" id="isApprovedDropdown" data-toggle="dropdown">';
+            if ($row['IsApproved'] == 1) {
+                echo 'Yes';
+            } else {
+                echo 'No';
+            }
+            echo '<span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
                         <li><a onclick="$(\'#isApprovedDropdown\').html(\'Yes<span class=\\\'caret\\\'></span>\');$(\'#isApproved\').val(1).change();">Yes</a></li>
@@ -92,7 +96,7 @@
                     </ul>
                 </div>
                 <p>Notes: </p>
-                <textarea class="form-control" id="notes" maxlength="500" value="' . $row['Notes'] . '"></textarea>
+                <textarea class="form-control" id="notes" maxlength="500">' . $row['Notes'] . '</textarea>
                 <button class="btn btn-primary" id="submitButton" onclick="updateEquivalency(\''
                 . EscapeStringForFunctionCall($row['OtherCourseCode']) . '\', \''
                 . EscapeStringForFunctionCall($row['OtherSchool']) . '\', \''

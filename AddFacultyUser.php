@@ -27,7 +27,7 @@
         if (strlen($username) < 1
                 || strlen($password) < 1
                 || strlen($realName) < 1) {
-            EchoDismissableAlert("Failed to add user.");
+            EchoDismissableAlert("Failed to add user.  Make sure you've filled out every field.");
         }
 
         // Determine salt.
@@ -52,7 +52,7 @@
         if ($result != false) {
             EchoDismissableSuccess("Successfully added user.");
         } else {
-            EchoDismissableAlert("Failed to add user.");
+            EchoDismissableAlert("Failed to add user; username is already taken.");
         }
 
         // Close the db connection and redirect to the home page.

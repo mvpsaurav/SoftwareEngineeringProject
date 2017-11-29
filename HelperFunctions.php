@@ -62,8 +62,6 @@
             </div>
             <button class=\"btn btn-primary\" onclick=\"addFacultyMember();\">Submit</button>
     	</div>
-        <div id=\"addFacultyUserAlertSection\" class=\"well\">
-        </div>
         <script>
         /**
         * Adds a new faculty member.
@@ -78,9 +76,12 @@
             xhttp.open(\"POST\", \"AddFacultyUser.php\");
             xhttp.setRequestHeader(\"Content-type\", \"application/x-www-form-urlencoded\");
             xhttp.send(\"username=\" + $('#username').val()
-                      + \"&password=\" + hash($('#password').val()));
+                      + \"&password=\" + hash($('#password').val())
+                      + \"&realName=\" + $('#realName').val());
         }
         </script>
+    </div>
+    <div id=\"addFacultyUserAlertSection\">
     </div>";
         }
         echo "<script>

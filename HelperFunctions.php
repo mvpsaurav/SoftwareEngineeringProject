@@ -172,7 +172,7 @@
         echo '<table class="table table-striped table-responsive"><thead><tr>';
 
         // Iterate through and print the names of each field, as the table headers.
-        echo '<th>Other Course Code</th>
+        echo '<th>Outside Course Code</th>
         <th>Outside School</th>
         <th>SCU\'s Course Code</th>
         <th>Approved?</th>

@@ -51,21 +51,37 @@
             echo "<div class=\"well\">
                 <p><button class=\"btn btn-default\" onclick=\"$('#addFacultyUserSection').toggle();\" type=\"button\">Create new faculty user</button></p>
     	<div id=\"addFacultyUserSection\" style=\"display: none\">
-    		<form action=\"AddFacultyUser.php\" method=\"POST\">
-                        <div class=\"form-group\">
-    						<p>Username: <input type=\"text\" class=\"form-control\" name=\"username\" id=\"username\" placeholder=\"Username\"></p>
-                        </div>
-                        <div class=\"form-group\">
-                            <input type=\"hidden\" name=\"password\" id=\"password\">
-                            <p>Password: <input type=\"password\" class=\"form-control\" name=\"unhashedPassword\" id=\"unhashedPassword\" placeholder=\"Password\"></p>
-                        </div>
-                        <div class=\"form-group\">
-                            <p>Real name: <input type=\"text\" class=\"form-control\" name=\"realName\" id=\"realName\" placeholder=\"Real Name\"></p>
-                        </div>
-                        <button type=\"submit\" class=\"btn btn-primary\">Submit</button>
-                    </form>
+            <div class=\"form-group\">
+				<p>Username: <input type=\"text\" class=\"form-control\" name=\"username\" id=\"username\" placeholder=\"Username\"></p>
+            </div>
+            <div class=\"form-group\">
+                <p>Password: <input type=\"password\" class=\"form-control\" name=\"password\" id=\"password\" placeholder=\"Password\"></p>
+            </div>
+            <div class=\"form-group\">
+                <p>Real name: <input type=\"text\" class=\"form-control\" name=\"realName\" id=\"realName\" placeholder=\"Real Name\"></p>
+            </div>
+            <button class=\"btn btn-primary\" onclick=\"addFacultyMember();\">Submit</button>
     	</div>
-    		</div>";
+        <div id=\"addFacultyUserAlertSection\" class=\"well\">
+        </div>
+        <script>
+        /**
+        * Adds a new faculty member.
+        */
+        addFacultyMember = function() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                    document.getElementById(\"addFacultyUserAlertSection\").innerHTML = this.responseText;
+                }
+            };
+            xhttp.open(\"POST\", \"AddFacultyUser.php\");
+            xhttp.setRequestHeader(\"Content-type\", \"application/x-www-form-urlencoded\");
+            xhttp.send(\"username=\" + $('#username').val()
+                      + \"&password=\" + hash($('#password').val()));
+        }
+        </script>
+    </div>";
         }
         echo "<script>
         $('#unhashedPassword').change(function() {

@@ -117,6 +117,13 @@
 ?>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="well">
+                        <h1><a href="SoftwareEngineeringProject.php">Back to home</a></h1>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 

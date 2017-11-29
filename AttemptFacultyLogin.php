@@ -20,6 +20,7 @@
         if ($result != false && ($row = $result->fetch_assoc()) != null) {
             $hashedAndSaltedPassword = hash("sha256", $password . $row['Salt']);
             if ($hashedAndSaltedPassword == $row['HashedPassword']) {
+                // Start the session with the user logged in.
                 session_start();
                 $_SESSION["loggedIn"] = true;
                 $_SESSION["username"] = $row['Username'];
@@ -28,15 +29,16 @@
                 EchoDismissableSuccess("Logging in...");
             } else {
                 header("LoggedIn: false");
-                EchoDismissableAlert("Password is invalid.");
+                EchoDismissableAlert("Username or password does not exist.");
             }
         } else {
             header("LoggedIn: false");
-            EchoDismissableAlert("Username is invalid.");
+            EchoDismissableAlert("Username or password does not exist.");
         }
 
         $conn->close();
     } else {
+        header("LoggedIn: false");
         EchoDismissableAlert("Failed to log in.");
     }
 ?>

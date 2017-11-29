@@ -3,7 +3,7 @@
 
     session_start();
 
-    // If the submit button was clicked, add a new entry to the table.
+    // Make sure that the variables are set.
     if(isset($_GET['otherCourseCode'])
             && isset($_GET['otherSchoolName'])
             && isset($_GET['localCourseCode'])
@@ -35,7 +35,6 @@
             . "AND localCourseCode = '$localCourseCode' "
             . "AND isApproved = $isApproved "
             . "AND approvedBy = '$approvedBy'";
-        echo $sql;
         if ($conn->query($sql) == false) {
             EchoDismissableAlert("There was a problem removing the equivalency.  Make sure you entered your
             values correctly and try again.");

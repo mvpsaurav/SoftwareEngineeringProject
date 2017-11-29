@@ -1,4 +1,6 @@
 <?php
+    // A helper function to display a bootstrap error alert with a custom
+    // message.
     function EchoDismissableAlert($message) {
         echo "<div class='alert alert-danger alert-dismissible'>
         <button type='button' class='close' data-dismiss='alert'>&times;</button>
@@ -6,6 +8,8 @@
         </div>";
     }
 
+    // A helper function to display a bootstrap success alert with a custom
+    // message.
     function EchoDismissableSuccess($message) {
         echo "<div class='alert alert-success alert=dismissible'>
         <button type='button' class='close' data-dismiss='alert'>&times;</button>
@@ -13,6 +17,8 @@
         </div>";
     }
 
+    // A helper function to display the panel on the home page that is shown
+    // when the user is logged in.
     function EchoLoggedInPanel() {
         echo "<div class=\"well\">
             <p>Logged in as " . $_SESSION['realName'] . " (" . $_SESSION['username'] . ")</p>
@@ -103,6 +109,8 @@
         </script>";
     }
 
+    // A helper function to display the panel on the home page that is shown
+    // when the user is not logged in.
     function EchoNotLoggedInPanel() {
         echo "<div class=\"well\">
             <p><button class=\"btn btn-default\" onclick=\"$('#facultyLogin').toggle();\" type=\"button\">Faculty login</button></p>
@@ -135,45 +143,22 @@
         </script>";
     }
 
+    // A very hacky helper function that properly escapes HTML tags / characters
+    // when being fed into a javascript function.
     function EscapeStringForFunctionCall($string) {
         return str_replace("'", "\'", str_replace("\\", "\\\\", htmlentities($string)));
     }
 
-    # Utility function for doing a regex match that will a split a string into its
-    # parts assuming the parts are delimited by camelCasing or by underscores.
-    function MatchByUnderscoresOrCamelCase($pattern, $string) {
-        $matches = [];
-        preg_match_all($pattern, $string, $matches, PREG_OFFSET_CAPTURE);
-        $matches = $matches[0];
-        $words = [];
-        $firstWord = substr($string, 0, $matches[0][1]);
-        array_push($words, $firstWord);
-        $end = strlen($firstWord);
-        for ($i = 0; $i < count($matches) - 1; $i++) {
-            if ($matches[$i][1] == "_") {
-                $start = $matches[$i][1] + 1;
-            } else {
-                $start = $matches[$i][1];
-            }
-            $end = $matches[$i + 1][1];
-            array_push($words, substr($string, $start, $end - $start));
-        }
-        if (count($matches) > 0) {
-            array_push($words, substr($string, $end));
-        }
-        return $words;
-    }
-
-    # Function for displaying the results of a MySQL query result object nicely,
-    # using Bootstrap's table styling.
+    // Function for displaying the results of a MySQL query result object nicely,
+    // using Bootstrap's table styling.
     function DisplayResults($results, $canDelete = false, $detailed = false) {
-        # Check if the query failed.
+        // Check if the query failed.
         if(!$results) {
             echo '<h2>Something went wrong with the query.</h2>';
             return;
         }
 
-        # Output the amount of results.
+        // Output the amount of results.
         if($results->fetch_assoc() == NULL or $results->num_rows == 0) {
             echo '<h2 id="numResults">No results.</h2>';
             return;
@@ -186,18 +171,7 @@
         }
         echo '<table class="table table-striped table-responsive"><thead><tr>';
 
-        # Iterate through and print the names of each field, as the table headers.
-        // $results->data_seek(0);
-        // foreach($results->fetch_assoc() as $key => $value) {
-        //     # Split the name of the column by either underscores or camelCasing.
-        //     $pattern = "/(?<=[a-z])(?=[A-Z])|_/";
-        //     $words = MatchByUnderscoresOrCamelCase($pattern, $key);
-        //     echo '<th>';
-        //     foreach ($words as $word) {
-        //         echo ucwords($word) . ' ';
-        //     }
-        //     echo "</th>\n";
-        // }
+        // Iterate through and print the names of each field, as the table headers.
         echo '<th>Other Course Code</th>
         <th>Outside School</th>
         <th>SCU\'s Course Code</th>
@@ -218,18 +192,10 @@
         }
         echo '</tr></thead><tbody id="results">';
 
-        # Iterate through and print the contents of each field.
+        // Iterate through and print the contents of each field.
         $results->data_seek(0);
         while($row = $results->fetch_assoc()) {
             echo '<tr>';
-            // foreach($row as $value) {
-            //     if ($value === '0') {
-            //         $value = 'No';
-            //     } else if ($value === '1') {
-            //         $value = 'Yes';
-            //     }
-            //     echo '<td>' . htmlspecialchars($value) . '</td>' . "\n";
-            // }
             echo '<td>' . htmlspecialchars($row['OtherCourseCode']) . '</td>
             <td>' . htmlspecialchars($row['OtherSchool']) . '</td>
             <td>' . htmlspecialchars($row['LocalCourseCode']) . '</td>
@@ -275,7 +241,7 @@
             echo '</tr>';
         }
 
-        # Terminate the table.
+        // Terminate the table.
         echo '</tbody></table>';
     }
 ?>

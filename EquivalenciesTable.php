@@ -11,6 +11,7 @@
     $conn = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
 
     if ($conn != false) {
+        // Get as many search terms as are set.
         if (isset($_GET['otherSchoolName'])) {
             $otherSchoolName = $conn->real_escape_string($_GET['otherSchoolName']);
         } else {
@@ -32,12 +33,12 @@
             $approvedBy = "";
         }
 
+        // Get the results from the table.
         $query = "SELECT * FROM COEN174CourseEquivalencies "
                 . "WHERE otherSchool LIKE '%" . $otherSchoolName . "%' "
                 . "AND otherCourseCode LIKE '%" . $otherCourseCode . "%' "
                 . "AND localCourseCode LIKE '%" . $localCourseCode . "%' "
                 . "AND approvedBy LIKE '%" . $approvedBy . "%'";
-
         $result = $conn->query($query);
         DisplayResults($result);
     } else {

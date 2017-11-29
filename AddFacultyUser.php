@@ -3,6 +3,7 @@
 
     session_start();
 
+    // Make sure the user is logged in as the administrator.
     if(isset($_POST['username'])
             && isset($_POST['password'])
             && isset($_POST['realName'])
@@ -37,7 +38,7 @@
         }
         $hashedAndSaltedPassword = hash("sha256", $password . $salt);
 
-        // Log in the user, if possible.
+        // Add the new user to the users table.
         $sql = "INSERT INTO COEN174FacultyUsers "
                 . "(Username, HashedPassword, Salt, RealName) "
                 . "VALUES('"
@@ -46,12 +47,16 @@
                 . $salt . "', '"
                 . $realName . "')";
         $result = $conn->query($sql);
+
+        // If the new user is added successfully, then display a success
+        // message.  Otherwise, display an error message.
         if ($result != false) {
             EchoDismissableSuccess("Successfully added user.");
         } else {
             EchoDismissableAlert("Failed to add user.");
         }
 
+        // Close the db connection and redirect to the home page.
         $conn->close();
         header("Location: SoftwareEngineeringProject.php");
     } else {

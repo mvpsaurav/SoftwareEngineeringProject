@@ -3,7 +3,8 @@
 
     session_start();
 
-    // If the submit button was clicked, add a new entry to the table.
+    // Make sure that the variables are properly set and that the user is logged
+    // in.
     if(isset($_GET['otherCourseCode'])
             && isset($_GET['otherSchoolName'])
             && isset($_GET['localCourseCode'])
@@ -35,12 +36,20 @@
                 . $isApproved . ", '"
                 . $_SESSION['realName'] . "', '"
                 . $notes . "')";
-        if ($conn->query($sql) == false) {
+        $result = $conn->query($sql);
+
+        // If the new equivalency was added successfully, display a success
+        // message.  Otherwise, display an error message.
+        if ($result == false) {
             EchoDismissableAlert("There was a problem adding the equivalency.  Make sure you entered your
             values correctly and try again.");
             http_response_code(500);
         } else {
             EchoDismissableSuccess("Equivalency successfully added.");
+
+            // Create a header to indicate that the user was added successfully,
+            // so the page that is sending a request to AddNewEquivalency.php
+            // has an easy way to know that there was a success.
             header("Success: true");
         }
 

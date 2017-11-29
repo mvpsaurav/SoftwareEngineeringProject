@@ -31,7 +31,6 @@
                 <div class="col-md-12">
                     <div class="well">
 <?php
-
     include 'HelperFunctions.php';
 
     session_start();
@@ -44,25 +43,31 @@
     $conn = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
 
     // Validate variables.
-    $otherCourseCode = $conn->real_escape_string($_GET['otherCourseCode']);
-    $otherSchoolName = $conn->real_escape_string($_GET['otherSchoolName']);
-    $localCourseCode = $conn->real_escape_string($_GET['localCourseCode']);
-    $isApproved = $conn->real_escape_string($_GET['isApproved']);
-    $approvedBy = $conn->real_escape_string($_GET['approvedBy']);
+    if (isset($_GET['otherCourseCode'])
+            && isset($_GET['otherSchoolName'])
+            && isset($_GET['localCourseCode'])
+            && isset($_GET['isApproved'])
+            && isset($_GET['approvedBy'])) {
+        $otherCourseCode = $conn->real_escape_string($_GET['otherCourseCode']);
+        $otherSchoolName = $conn->real_escape_string($_GET['otherSchoolName']);
+        $localCourseCode = $conn->real_escape_string($_GET['localCourseCode']);
+        $isApproved = $conn->real_escape_string($_GET['isApproved']);
+        $approvedBy = $conn->real_escape_string($_GET['approvedBy']);
 
-    $sql = "SELECT * FROM COEN174CourseEquivalencies "
-        . "WHERE OtherCourseCode = '$otherCourseCode' "
-        . "AND OtherSchool = '$otherSchoolName' "
-        . "AND LocalCourseCode = '$localCourseCode' "
-        . "AND IsApproved = $isApproved "
-        . "AND ApprovedBy = '$approvedBy'";
+        $sql = "SELECT * FROM COEN174CourseEquivalencies "
+            . "WHERE OtherCourseCode = '$otherCourseCode' "
+            . "AND OtherSchool = '$otherSchoolName' "
+            . "AND LocalCourseCode = '$localCourseCode' "
+            . "AND IsApproved = $isApproved "
+            . "AND ApprovedBy = '$approvedBy'";
 
-    $result = $conn->query($sql);
-    if (isset($_SESSION['loggedIn'])
-            && $_SESSION['loggedIn'] == true) {
-        DisplayResults($result, true, true);
-    } else {
-        DisplayResults($result, false, true);
+        $result = $conn->query($sql);
+        if (isset($_SESSION['loggedIn'])
+                && $_SESSION['loggedIn'] == true) {
+            DisplayResults($result, true, true);
+        } else {
+            DisplayResults($result, false, true);
+        }
     }
 ?>
                     </div>

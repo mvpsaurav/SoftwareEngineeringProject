@@ -3,7 +3,7 @@
 
     session_start();
 
-    // If the submit button was clicked, add a new entry to the table.
+    // Verify that all of the variables are set.
     if(isset($_POST['otherCourseCode'])
             && isset($_POST['originalOtherCourseCode'])
             && isset($_POST['otherSchoolName'])
@@ -33,6 +33,9 @@
         $isApproved = $conn->real_escape_string($_POST['isApproved']);
         $originalIsApproved = $conn->real_escape_string($_POST['originalIsApproved']);
         $notes = $conn->real_escape_string($_POST['notes']);
+
+        // An equivalency may only be modified by the user who created it or
+        // the admin.  Enforce that here.
         $approvedBy = $_SESSION['realName'];
         if ($_SESSION['username'] == "admin") {
             $originalApprovedBy = $conn->real_escape_string($_POST['originalApprovedBy']);

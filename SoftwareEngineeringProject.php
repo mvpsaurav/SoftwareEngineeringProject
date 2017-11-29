@@ -43,6 +43,9 @@
 <?php
     include 'HelperFunctions.php';
     session_start();
+
+    // Display something different here, depending on whether the user is logged
+    // in or not.
     if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
         EchoLoggedInPanel();
     } else {
@@ -119,7 +122,7 @@
     // Run this when the page loads.
     window.onload = updateRows;
 
-    // Bullshit client-side hashing
+    // Client-side hashing
     hash = function(s) {
         return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
     }

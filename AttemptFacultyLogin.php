@@ -29,11 +29,11 @@
                 EchoDismissableSuccess("Logging in...");
             } else {
                 header("LoggedIn: false");
-                EchoDismissableAlert("Username or password does not exist.");
+                EchoDismissableAlert("Username or password is incorrect.");
             }
         } else {
             header("LoggedIn: false");
-            EchoDismissableAlert("Username or password does not exist.");
+            EchoDismissableAlert("Username or password is incorrect.");
         }
 
         $conn->close();

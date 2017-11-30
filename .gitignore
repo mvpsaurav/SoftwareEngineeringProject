@@ -1,2 +1,8 @@
 *.sql
 *notes.md
+*.aux
+*.log
+*.lof
+*.pdf
+*.tmp
+*.toc

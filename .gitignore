@@ -6,3 +6,5 @@
 *.pdf
 *.tmp
 *.toc
+*.dvi
+*.gz

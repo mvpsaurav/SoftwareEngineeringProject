@@ -19,7 +19,7 @@ SCU course equivalency system. It makes a few assumptions:
 Center (ECC) computers.
 Installation on an arbitrary system is possible, but is not included in the scope
 of this document.
-\item You must have the necessary source files
+\item You must have the 10 necessary PHP source files
 (AddFacultyUser.php, AddNewEquivalency.php, AttemptFacultyLogin.php,
 EquivalenciesTable.php, HelperFunctions.php, Logout.php, ModifyEquivalency.php,
 RemoveEquivalency.php, SoftwareEngineeringProject.php, and ViewEquivalency.php)
@@ -54,9 +54,7 @@ the default username/password, if you have not yet changed yours).
 Click on the link on the left side of the screen that says sdb\_\textless YOUR
 USERNAME\textgreater .
 This is the database in which you will create your tables.
-\item Click on the ``SQL'' tab at the top of the page. See \cref{fig:dbview}. Note
-that the two tables are already created and visible in \cref{fig:dbview}; yours will not be
-created yet.
+\item Click on the ``SQL'' tab at the top of the page. See \cref{fig:dbview}.
 \item Copy and paste the entire contents of TableDefinitions.sql into the text
 area available on the page. See \cref{fig:sql}.  Click the ``Go'' button on the
 right side of the screen.  This creates the tables in your database.  Refresh
@@ -67,7 +65,25 @@ created successfully.
 \par After completing these steps, the database backend of this system has been
 successfully set up.
 
-\section{Installing source files}
+\section{Installing Bootstrap}
+\par This system uses the Bootstrap framework to style the user interface.
+Follow these steps to download and install the Bootstrap framework.
+\begin{enumerate}
+\item Download Bootstrap 3.3 by clicking on the "Download Bootstrap" button at
+\newline http://getbootstrap.com/docs/3.3/getting-started/.
+\item The downloaded .zip archive, when unpacked, contains 3 directories: css,
+js, and fonts. Copy the following 3 files from these directories into your student webpage directory, located on
+the ECC computers in the directory /webpages/\textless YOUR USERNAME\textgreater :
+\begin{enumerate}
+\item css/bootstrap.css
+\item css/bootstrap-theme.css
+\item js/bootstrap.min.js
+\end{enumerate}
+\end{enumerate}
+\par After following these steps, Bootstrap has been installed on your ECC
+student webpage.
+
+\section{Installing PHP Source Files}
 \par The next step of the installation process involves installing the source
 files on the ECC computers so that they will be served to visitors by the ECC
 web server.  To do this, follow the following steps:
@@ -123,7 +139,7 @@ the system works, navigate to students.engr.scu.edu/\textasciitilde \textless
 YOUR USERNAME\textgreater /SoftwareEngineeringProject.php and verify that you
 arrive at the home page.  You should be able to log in as the administrator
 (username is ``admin'', password is ``password''), which will allow you to
-create faculty users and create equivalencies.
+create faculty users and equivalencies.
 
 \begin{figure}[h]
 \includegraphics[width=5cm]{dagobah}

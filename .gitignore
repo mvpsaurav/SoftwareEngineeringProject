@@ -8,3 +8,5 @@
 *.toc
 *.dvi
 *.gz
+*.fdb_latexmk
+*.fls

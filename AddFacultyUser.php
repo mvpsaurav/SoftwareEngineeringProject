@@ -45,15 +45,23 @@
                 . $hashedAndSaltedPassword . "', '"
                 . $salt . "', '"
                 . $realName . "')";
-        $result = $conn->query($sql);
+       // $result = $conn->query($sql);
+        $result = mysqli_query($conn,$sql);
+
+if ($result) {
+    echo "</br><b>Successfully added user.</br></b>";
+}
+else {
+    echo "</br><b>Failed to add user; username is already taken.</br></b>";
+}
 
         // If the new user is added successfully, then display a success
         // message.  Otherwise, display an error message.
-        if ($result != false) {
-            EchoDismissableSuccess("Successfully added user.");
-        } else {
-            EchoDismissableAlert("Failed to add user; username is already taken.");
-        }
+       // if ($result != false) {
+        //    EchoDismissableSuccess("Successfully added user.");
+        //} else {
+          //  EchoDismissableAlert("Failed to add user; username is already taken.");
+        //}
 
         // Close the db connection and redirect to the home page.
         $conn->close();
